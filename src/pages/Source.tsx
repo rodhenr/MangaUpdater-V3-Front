@@ -2,43 +2,27 @@ import { useEffect, useState } from "react";
 import BaseButton from "../components/button/BaseButton";
 import EditableTable from "../components/dataGrid/EditableTable";
 import Modal from "../components/modal/Modal";
-import { mockManga } from "../data/fakeData";
+import { mockSource } from "../data/fakeData";
 import { IData, IRow } from "../interfaces/interfaces";
 import "../styles/Manga.scss";
 
 const columns = [
   { isEditable: false, field: "id", headerName: "ID" },
-  {
-    isEditable: true,
-    field: "myAnimeListId",
-    headerName: "ID MyAnimeList",
-  },
-  { isEditable: true, field: "anilistId", headerName: "ID Anilist" },
-  {
-    isEditable: true,
-    field: "titleRomaji",
-    headerName: "Romaji Title",
-  },
-  {
-    isEditable: true,
-    field: "titleEnglish",
-    headerName: "English Title",
-  },
+  { isEditable: true, field: "name", headerName: "Name" },
+  { isEditable: true, field: "baseUrl", headerName: "Base URL" },
 ];
 
-function Manga() {
+function Source() {
   const [data, setData] = useState<IData | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [newItem, setNewItem] = useState<IRow | null>({
     id: 0,
-    myAnimeListId: "",
-    anilistId: "",
-    titleRomaji: "",
-    titleEnglish: "",
+    name: "",
+    baseUrl: "",
   });
 
   useEffect(() => {
-    setData({ rows: mockManga, columns });
+    setData({ rows: mockSource, columns: columns });
   }, []);
 
   const handleOpenModal = () => {
@@ -61,7 +45,7 @@ function Manga() {
   };
 
   return (
-    <div className="manga-page">
+    <div className="source-page">
       <BaseButton onClick={handleOpenModal} text="Add" />
       {data && <EditableTable columns={data.columns} rows={data.rows} />}
 
@@ -76,4 +60,4 @@ function Manga() {
   );
 }
 
-export default Manga;
+export default Source;

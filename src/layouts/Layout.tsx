@@ -32,6 +32,18 @@ const Layout = () => {
             </ListItemIcon>
             <ListItemText primary="Manga" />
           </ListItem>
+          <ListItem component={Link} to="/source">
+            <ListItemIcon>
+              <MenuBook />
+            </ListItemIcon>
+            <ListItemText primary="Source" />
+          </ListItem>
+          <ListItem component={Link} to="/mangasource">
+            <ListItemIcon>
+              <MenuBook />
+            </ListItemIcon>
+            <ListItemText primary="Manga Source" />
+          </ListItem>
         </List>
       </nav>
       <main className="content">
