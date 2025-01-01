@@ -1,0 +1,17 @@
+.manga-page {
+  padding: 20px;
+  color: #e0e0e0;
+
+  .button-container {
+    margin-bottom: 20px;
+
+    button {
+      margin-right: 10px;
+      background-color: #3a3a3a;
+      color: #e0e0e0;
+      &:hover {
+        background-color: #505050;
+      }
+    }
+  }
+}

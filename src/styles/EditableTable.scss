@@ -1,0 +1,100 @@
+@use "sass:color";
+
+$table-background-color: #2b2b2b;
+$table-head-background: #3a3a3a;
+$table-row-even: #323232;
+$table-row-odd: #3a3a3a;
+$table-row-hover: #454545;
+$table-text-color: #e0e0e0;
+$text-field-background: #4b4b4b;
+$text-field-text: #ffffff;
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: $table-background-color;
+  color: $table-text-color;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.table-head {
+  background-color: $table-head-background;
+
+  .MuiTableCell-root {
+    color: $table-text-color;
+    font-weight: bold;
+    border-bottom: 1px solid color.mix($table-head-background, #ffffff, 10%);
+  }
+}
+
+.table-body {
+  .MuiTableRow-root {
+    background-color: $table-row-even;
+    transition: background-color 0.3s ease;
+
+    &:nth-of-type(odd) {
+      background-color: $table-row-odd;
+    }
+
+    &:hover {
+      background-color: $table-row-hover;
+    }
+
+    .MuiTableCell-root {
+      color: none !important;
+      border-bottom: 1px solid color.mix($table-row-even, #ffffff, 10%);
+    }
+  }
+
+  td {
+    color: inherit !important;
+  }
+
+  .text-field-container {
+    .MuiInputBase-root {
+      color: $text-field-text;
+      background-color: $text-field-background;
+      font-size: inherit;
+      padding: 0 4px;
+      display: inline-flex;
+      width: auto;
+    }
+
+    .MuiInputBase-input {
+      padding: 0;
+      height: auto;
+      width: auto;
+      min-width: 0;
+      text-align: inherit;
+    }
+  }
+}
+
+.buttons-container {
+  display: flex;
+  gap: 8px;
+
+  .MuiButton-root {
+    color: $table-text-color;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: none;
+  }
+
+  .MuiButton-containedPrimary {
+    background-color: #1e88e5;
+
+    &:hover {
+      background-color: #1565c0;
+    }
+  }
+
+  .MuiButton-containedSecondary {
+    background-color: #e53935;
+
+    &:hover {
+      background-color: #b71c1c;
+    }
+  }
+}

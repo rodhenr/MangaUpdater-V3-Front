@@ -1,15 +1,51 @@
 .layout {
   display: flex;
   height: 100vh;
+  width: 100%;
 }
 
 .sidebar {
+  background-color: #111111;
   width: 240px;
-  background-color: #f4f4f4;
   padding-top: 20px;
 }
 
+.sidebar .MuiListItem-root {
+  color: #b0b0b0;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar .MuiListItem-root:hover {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.sidebar .MuiListItemIcon-root {
+  color: #b0b0b0;
+  transition: color 0.3s ease;
+}
+
+.sidebar .MuiListItem-root:hover .MuiListItemIcon-root {
+  color: #ffffff;
+}
+
+.sidebar .MuiListItemText-primary {
+  transition: color 0.3s ease;
+}
+
+.sidebar .MuiListItem-root:hover .MuiListItemText-primary {
+  color: #ffffff;
+}
+
+.sidebar .MuiListItem-root.Mui-selected {
+  background-color: #555555;
+}
+
 .content {
-  flex-grow: 1;
-  padding: 20px;
+  background-color: #242424;
+  box-sizing: border-box;
+  flex: 1;
 }
