@@ -1,7 +1,7 @@
 export interface IManga {
   id: number;
   myAnimeListId: number;
-  anilistId: number;
+  aniListId: number;
   titleRomaji: string;
   titleEnglish: string;
 }
@@ -19,6 +19,11 @@ export interface IMangaSource {
   url: string;
 }
 
+export interface IMangaSourceApi extends IMangaSource {
+  mangaName: string;
+  sourceName: string;
+}
+
 export interface IData {
   columns: IColumn[];
   rows: IRow[];
@@ -31,6 +36,6 @@ export interface IColumn {
 }
 
 export interface IRow {
-  id: number | string;
+  id: number;
   [key: string]: string | number;
 }

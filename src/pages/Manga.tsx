@@ -1,8 +1,9 @@
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { fetchMangas } from "../api/queries/Queries";
 import BaseButton from "../components/button/BaseButton";
 import EditableTable from "../components/dataGrid/EditableTable";
 import Modal from "../components/modal/Modal";
-import { mockManga } from "../data/fakeData";
 import { IData, IRow } from "../interfaces/interfaces";
 import "../styles/Manga.scss";
 
@@ -37,9 +38,27 @@ function Manga() {
     titleEnglish: "",
   });
 
+  const {
+    data: mangaList,
+    error,
+    isLoading,
+  } = useQuery({ queryKey: ["manga"], queryFn: fetchMangas });
+
   useEffect(() => {
-    setData({ rows: mockManga, columns });
-  }, []);
+    if (!mangaList) return;
+
+    const rows: IRow[] = mangaList.map((x) => {
+      return {
+        id: x.id,
+        myAnimeListId: x.myAnimeListId,
+        anilistId: x.aniListId,
+        titleEnglish: x.titleEnglish,
+        titleRomaji: x.titleRomaji,
+      };
+    });
+
+    setData({ rows, columns });
+  }, [mangaList]);
 
   const handleOpenModal = () => {
     setNewItem(null);
@@ -59,6 +78,9 @@ function Manga() {
 
     setOpenModal(false);
   };
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error instanceof Error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="manga-page">

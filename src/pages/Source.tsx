@@ -1,8 +1,9 @@
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { fetchSources } from "../api/queries/Queries";
 import BaseButton from "../components/button/BaseButton";
 import EditableTable from "../components/dataGrid/EditableTable";
 import Modal from "../components/modal/Modal";
-import { mockSource } from "../data/fakeData";
 import { IData, IRow } from "../interfaces/interfaces";
 import "../styles/Manga.scss";
 
@@ -21,9 +22,25 @@ function Source() {
     baseUrl: "",
   });
 
+  const {
+    data: sourceList,
+    error,
+    isLoading,
+  } = useQuery({ queryKey: ["manga"], queryFn: fetchSources });
+
   useEffect(() => {
-    setData({ rows: mockSource, columns: columns });
-  }, []);
+    if (!sourceList) return;
+
+    const rows: IRow[] = sourceList.map((x) => {
+      return {
+        id: x.id,
+        name: x.name,
+        baseUrl: x.baseUrl,
+      };
+    });
+
+    setData({ rows, columns });
+  }, [sourceList]);
 
   const handleOpenModal = () => {
     setNewItem(null);
@@ -43,6 +60,9 @@ function Source() {
 
     setOpenModal(false);
   };
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error instanceof Error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="source-page">

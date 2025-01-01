@@ -1,15 +1,18 @@
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { fetchMangaSources } from "../api/queries/Queries";
 import BaseButton from "../components/button/BaseButton";
 import EditableTable from "../components/dataGrid/EditableTable";
 import Modal from "../components/modal/Modal";
-import { mockMangaSource } from "../data/fakeData";
 import { IData, IRow } from "../interfaces/interfaces";
 import "../styles/Manga.scss";
 
 const columns = [
   { isEditable: false, field: "id", headerName: "ID" },
   { isEditable: true, field: "mangaId", headerName: "ID Manga" },
+  { isEditable: false, field: "mangaName", headerName: "Manga" },
   { isEditable: true, field: "sourceId", headerName: "ID Source" },
+  { isEditable: false, field: "sourceName", headerName: "Source" },
   { isEditable: true, field: "url", headerName: "URL" },
 ];
 
@@ -23,9 +26,28 @@ function MangaSource() {
     url: "",
   });
 
+  const {
+    data: sourceList,
+    error,
+    isLoading,
+  } = useQuery({ queryKey: ["mangaSource"], queryFn: fetchMangaSources });
+
   useEffect(() => {
-    setData({ rows: mockMangaSource, columns });
-  }, []);
+    if (!sourceList) return;
+
+    const rows: IRow[] = sourceList.map((x) => {
+      return {
+        id: x.id,
+        mangaId: x.mangaId,
+        mangaName: x.mangaName,
+        sourceId: x.sourceId,
+        sourceName: x.sourceName,
+        url: x.url,
+      };
+    });
+
+    setData({ rows, columns });
+  }, [sourceList]);
 
   const handleOpenModal = () => {
     setNewItem(null);
@@ -45,6 +67,9 @@ function MangaSource() {
 
     setOpenModal(false);
   };
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error instanceof Error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="manga-page">
