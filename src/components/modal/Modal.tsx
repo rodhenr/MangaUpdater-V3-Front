@@ -56,17 +56,19 @@ const Modal: React.FC<ModalProps> = ({
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{existingData ? "Edit Item" : "Add New Item"}</DialogTitle>
       <DialogContent>
-        {columns.map((column) => (
-          <TextField
-            key={column.field}
-            label={column.headerName}
-            name={column.field}
-            value={newItem[column.field] || ""}
-            onChange={handleInputChange}
-            fullWidth
-            margin="normal"
-          />
-        ))}
+        {columns
+          .filter((x) => x.isAdd)
+          .map((column) => (
+            <TextField
+              key={column.field}
+              label={column.headerName}
+              name={column.field}
+              value={newItem[column.field] || ""}
+              onChange={handleInputChange}
+              fullWidth
+              margin="normal"
+            />
+          ))}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="secondary">

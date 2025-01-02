@@ -1,19 +1,25 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { postMangaSources } from "../api/commands/Commands";
 import { fetchMangaSources } from "../api/queries/Queries";
 import BaseButton from "../components/button/BaseButton";
 import EditableTable from "../components/dataGrid/EditableTable";
 import Modal from "../components/modal/Modal";
-import { IData, IRow } from "../interfaces/interfaces";
+import { IData, IMangaSourcePost, IRow } from "../interfaces/interfaces";
 import "../styles/Manga.scss";
 
 const columns = [
-  { isEditable: false, field: "id", headerName: "ID" },
-  { isEditable: true, field: "mangaId", headerName: "ID Manga" },
-  { isEditable: false, field: "mangaName", headerName: "Manga" },
-  { isEditable: true, field: "sourceId", headerName: "ID Source" },
-  { isEditable: false, field: "sourceName", headerName: "Source" },
-  { isEditable: true, field: "url", headerName: "URL" },
+  { isAdd: false, isEditable: false, field: "id", headerName: "ID" },
+  { isAdd: true, isEditable: true, field: "mangaId", headerName: "ID Manga" },
+  { isAdd: false, isEditable: false, field: "mangaName", headerName: "Manga" },
+  { isAdd: true, isEditable: true, field: "sourceId", headerName: "ID Source" },
+  {
+    isAdd: false,
+    isEditable: false,
+    field: "sourceName",
+    headerName: "Source",
+  },
+  { isAdd: true, isEditable: true, field: "url", headerName: "URL" },
 ];
 
 function MangaSource() {
@@ -31,6 +37,8 @@ function MangaSource() {
     error,
     isLoading,
   } = useQuery({ queryKey: ["mangaSource"], queryFn: fetchMangaSources });
+
+  const mutation = useMutation({ mutationFn: postMangaSources });
 
   useEffect(() => {
     if (!sourceList) return;
@@ -59,11 +67,18 @@ function MangaSource() {
     setOpenModal(false);
   };
 
-  const handleAddNewItem = (newItem: IRow) => {
-    setData((prevData) => {
-      if (!prevData) return { rows: [newItem], columns: columns };
-      return { ...prevData, rows: [...prevData.rows, newItem] };
-    });
+  const handleAddNewItem = async (newItem: IRow) => {
+    try {
+      const mangaSource: IMangaSourcePost = {
+        mangaId: Number(newItem["mangaId"]),
+        sourceId: Number(newItem["sourceId"]),
+        url: String(newItem["url"]),
+      };
+
+      await mutation.mutateAsync(mangaSource);
+    } catch (err) {
+      alert(err);
+    }
 
     setOpenModal(false);
   };
@@ -72,7 +87,7 @@ function MangaSource() {
   if (error instanceof Error) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="manga-page">
+    <div>
       <BaseButton onClick={handleOpenModal} text="Add" />
       {data && <EditableTable columns={data.columns} rows={data.rows} />}
 

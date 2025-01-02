@@ -30,6 +30,7 @@ export interface IData {
 }
 
 export interface IColumn {
+  isAdd: boolean;
   isEditable: boolean;
   field: string;
   headerName: string;
@@ -38,4 +39,22 @@ export interface IColumn {
 export interface IRow {
   id: number;
   [key: string]: string | number;
+}
+
+export interface IMangaPost {
+  myAnimeListId: number;
+  aniListId: number;
+  titleRomaji: string;
+  titleEnglish: string;
+}
+
+export interface ISourcePost {
+  name: string;
+  baseUrl: string;
+}
+
+export interface IMangaSourcePost {
+  mangaId: number;
+  sourceId: number;
+  url: string;
 }

@@ -1,16 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { postSource } from "../api/commands/Commands";
 import { fetchSources } from "../api/queries/Queries";
 import BaseButton from "../components/button/BaseButton";
 import EditableTable from "../components/dataGrid/EditableTable";
 import Modal from "../components/modal/Modal";
-import { IData, IRow } from "../interfaces/interfaces";
+import { IData, IRow, ISourcePost } from "../interfaces/interfaces";
 import "../styles/Manga.scss";
 
 const columns = [
-  { isEditable: false, field: "id", headerName: "ID" },
-  { isEditable: true, field: "name", headerName: "Name" },
-  { isEditable: true, field: "baseUrl", headerName: "Base URL" },
+  { isAdd: false, isEditable: false, field: "id", headerName: "ID" },
+  { isAdd: true, isEditable: true, field: "name", headerName: "Name" },
+  { isAdd: true, isEditable: true, field: "baseUrl", headerName: "Base URL" },
 ];
 
 function Source() {
@@ -27,6 +28,8 @@ function Source() {
     error,
     isLoading,
   } = useQuery({ queryKey: ["manga"], queryFn: fetchSources });
+
+  const mutation = useMutation({ mutationFn: postSource });
 
   useEffect(() => {
     if (!sourceList) return;
@@ -52,11 +55,17 @@ function Source() {
     setOpenModal(false);
   };
 
-  const handleAddNewItem = (newItem: IRow) => {
-    setData((prevData) => {
-      if (!prevData) return { rows: [newItem], columns: columns };
-      return { ...prevData, rows: [...prevData.rows, newItem] };
-    });
+  const handleAddNewItem = async (newItem: IRow) => {
+    try {
+      const source: ISourcePost = {
+        name: String(newItem["name"]),
+        baseUrl: String(newItem["baseUrl"]),
+      };
+
+      await mutation.mutateAsync(source);
+    } catch (err) {
+      alert(err);
+    }
 
     setOpenModal(false);
   };
@@ -65,7 +74,7 @@ function Source() {
   if (error instanceof Error) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="source-page">
+    <div>
       <BaseButton onClick={handleOpenModal} text="Add" />
       {data && <EditableTable columns={data.columns} rows={data.rows} />}
 
