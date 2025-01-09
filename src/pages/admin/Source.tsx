@@ -1,12 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { postSource } from "../api/commands/Commands";
-import { fetchSources } from "../api/queries/Queries";
-import BaseButton from "../components/button/BaseButton";
-import EditableTable from "../components/dataGrid/EditableTable";
-import Modal from "../components/modal/Modal";
-import { IData, IRow, ISourcePost } from "../interfaces/interfaces";
-import "../styles/Manga.scss";
+import { postSource } from "../../api/commands/Commands";
+import { fetchSources } from "../../api/queries/Queries";
+import BaseButton from "../../components/button/BaseButton";
+import EditableTable from "../../components/dataGrid/EditableTable";
+import Modal from "../../components/modal/Modal";
+import { IData, IRow, ISourcePost } from "../../interfaces/interfaces";
+import "../../styles/Manga.scss";
 
 const columns = [
   { isAdd: false, isEditable: false, field: "id", headerName: "ID" },
@@ -76,7 +76,9 @@ function Source() {
   return (
     <div>
       <BaseButton onClick={handleOpenModal} text="Add" />
-      {data && <EditableTable columns={data.columns} rows={data.rows} />}
+      {data && (
+        <EditableTable columns={data.columns} rows={data.rows} edit={true} />
+      )}
 
       <Modal
         open={openModal}

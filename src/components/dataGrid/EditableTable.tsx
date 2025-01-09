@@ -1,142 +1,76 @@
-import {
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TextField,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Paper } from "@mui/material";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import React from "react";
 import { IColumn, IRow } from "../../interfaces/interfaces";
-import "../../styles/EditableTable.scss";
 
 interface EditableTableProps {
   columns: IColumn[];
   rows: IRow[];
+  edit: boolean;
 }
 
 const EditableTable: React.FC<EditableTableProps> = ({ columns, rows }) => {
-  const [editRowId, setEditRowId] = useState<number | string | null>(null);
-  const [rowData, setRowData] = useState<IRow[]>(rows);
-  const [tempRowData, setTempRowData] = useState<IRow | null>(null);
+  const paginationModel = { page: 0, pageSize: 10 };
 
-  useEffect(() => {
-    setRowData(rows);
-    setTempRowData(null);
-    setEditRowId(null);
-  }, [rows]);
+  const transformedColumns: GridColDef[] = columns.map((column) => {
+    if (column.field === "id") {
+      return { ...column, width: 75 };
+    }
 
-  const handleEditClick = (row: IRow) => {
-    setEditRowId(row.id);
-    setTempRowData({ ...row });
-  };
+    if (column.field.toLowerCase().endsWith("id")) {
+      return { ...column, width: 150 };
+    }
 
-  const handleCancelClick = () => {
-    setEditRowId(null);
-    setTempRowData(null);
-  };
-
-  const handleSaveClick = () => {
-    if (!tempRowData) return;
-
-    setRowData((prevRows) =>
-      prevRows.map((row) => (row.id === editRowId ? tempRowData : row))
-    );
-    setEditRowId(null);
-    setTempRowData(null);
-  };
-
-  const handleDeleteClick = (id: number | string) => {
-    const rows = rowData.filter((x) => x.id !== id);
-
-    setRowData(rows);
-    setEditRowId(null);
-    setTempRowData(null);
-  };
-
-  const handleInputChange = (field: string, value: string | number) => {
-    if (!tempRowData) return;
-
-    setTempRowData((prev) => {
-      return {
-        ...prev,
-        [field]: value,
-      } as IRow;
-    });
-  };
-
-  const renderRows = () =>
-    rowData.map((row) => (
-      <TableRow key={row.id} className="table-body">
-        {columns.map((column) => (
-          <TableCell key={column.field} className="MuiTableCell-root">
-            {editRowId === row.id && column.isEditable ? (
-              <TextField
-                value={tempRowData?.[column.field] || ""}
-                onChange={(e) =>
-                  handleInputChange(column.field, e.target.value)
-                }
-                size="small"
-                className="text-field-container"
-              />
-            ) : (
-              row[column.field]
-            )}
-          </TableCell>
-        ))}
-        <TableCell className="MuiTableCell-root">
-          {editRowId === row.id ? (
-            <div className="buttons-container">
-              <Button
-                onClick={handleSaveClick}
-                color="primary"
-                variant="contained"
-              >
-                Save
-              </Button>
-              <Button
-                onClick={handleCancelClick}
-                color="secondary"
-                variant="contained"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={() => handleDeleteClick(row.id)}
-                color="secondary"
-                variant="contained"
-              >
-                Delete
-              </Button>
-            </div>
-          ) : (
-            <Button
-              onClick={() => handleEditClick(row)}
-              color="primary"
-              variant="contained"
-            >
-              Edit
-            </Button>
-          )}
-        </TableCell>
-      </TableRow>
-    ));
+    return { ...column, flex: 1, minWidth: 100 };
+  });
 
   return (
-    <Table className="table">
-      <TableHead className="table-head">
-        <TableRow>
-          {columns.map((column) => (
-            <TableCell key={column.field} className="MuiTableCell-root">
-              {column.headerName}
-            </TableCell>
-          ))}
-          <TableCell className="MuiTableCell-root">Actions</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>{renderRows()}</TableBody>
-    </Table>
+    <Paper
+      sx={{
+        height: "600px",
+        width: "100%",
+        bgcolor: "#121212",
+        color: "#fff",
+      }}
+    >
+      <DataGrid
+        rows={rows}
+        columns={transformedColumns}
+        initialState={{ pagination: { paginationModel } }}
+        pageSizeOptions={[10, 20, 50, 100]}
+        sx={{
+          border: 0,
+          "& .MuiDataGrid-root": {
+            bgcolor: "#212121",
+            color: "#fff",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            bgcolor: "#333333 !important",
+            color: "#fff !important",
+          },
+          "& .MuiDataGrid-row--borderBottom": {
+            bgcolor: "#333333 !important",
+          },
+          "& .MuiDataGrid-cell": {
+            bgcolor: "transparent",
+            color: "#fff",
+          },
+          "& .MuiDataGrid-row:hover": {
+            bgcolor: "#616161",
+          },
+          "& .MuiDataGrid-footerContainer": {
+            bgcolor: "#424242",
+            color: "#fff",
+          },
+          "& .MuiTablePagination-root": {
+            color: "#fff",
+          },
+          "& .MuiSvgIcon-root": {
+            color: "#fff",
+          },
+        }}
+      />
+    </Paper>
   );
 };
 

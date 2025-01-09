@@ -1,12 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { postManga } from "../api/commands/Commands";
-import { fetchMangas } from "../api/queries/Queries";
-import BaseButton from "../components/button/BaseButton";
-import EditableTable from "../components/dataGrid/EditableTable";
-import Modal from "../components/modal/Modal";
-import { IData, IMangaPost, IRow } from "../interfaces/interfaces";
-import "../styles/Manga.scss";
+import { postManga } from "../../api/commands/Commands";
+import { fetchMangas } from "../../api/queries/Queries";
+import BaseButton from "../../components/button/BaseButton";
+import EditableTable from "../../components/dataGrid/EditableTable";
+import Modal from "../../components/modal/Modal";
+import { IData, IMangaPost, IRow } from "../../interfaces/interfaces";
+import "../../styles/Manga.scss";
 
 const columns = [
   { isAdd: false, isEditable: false, field: "id", headerName: "ID" },
@@ -104,7 +104,9 @@ function Manga() {
   return (
     <div>
       <BaseButton onClick={handleOpenModal} text="Add" />
-      {data && <EditableTable columns={data.columns} rows={data.rows} />}
+      {data && (
+        <EditableTable columns={data.columns} rows={data.rows} edit={true} />
+      )}
 
       <Modal
         open={openModal}

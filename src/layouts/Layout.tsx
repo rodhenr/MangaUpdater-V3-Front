@@ -1,55 +1,30 @@
-import { Home, ListAlt, MenuBook, Queue } from "@mui/icons-material";
-import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
-import { Link, Outlet } from "react-router";
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import React from "react";
+import { Outlet } from "react-router";
 import "./Layout.scss";
 
-const Layout = () => {
+const Layout: React.FC = () => {
   return (
-    <div className="layout">
-      <nav className="sidebar">
-        <List>
-          <ListItem component={Link} to="/">
-            <ListItemIcon>
-              <Home />
-            </ListItemIcon>
-            <ListItemText primary="Home" />
-          </ListItem>
-          <ListItem component={Link} to="/queue">
-            <ListItemIcon>
-              <Queue />
-            </ListItemIcon>
-            <ListItemText primary="Queue" />
-          </ListItem>
-          <ListItem component={Link} to="/logs">
-            <ListItemIcon>
-              <ListAlt />
-            </ListItemIcon>
-            <ListItemText primary="Logs" />
-          </ListItem>
-          <ListItem component={Link} to="/manga">
-            <ListItemIcon>
-              <MenuBook />
-            </ListItemIcon>
-            <ListItemText primary="Manga" />
-          </ListItem>
-          <ListItem component={Link} to="/source">
-            <ListItemIcon>
-              <MenuBook />
-            </ListItemIcon>
-            <ListItemText primary="Source" />
-          </ListItem>
-          <ListItem component={Link} to="/mangasource">
-            <ListItemIcon>
-              <MenuBook />
-            </ListItemIcon>
-            <ListItemText primary="Manga Source" />
-          </ListItem>
-        </List>
-      </nav>
-      <main className="content">
+    <>
+      <AppBar position="sticky" sx={{ bgcolor: "#111111" }}>
+        <Toolbar sx={{ justifyContent: "space-between" }}>
+          <Typography variant="h6">MangaInfo</Typography>
+          <Box>
+            <Button color="inherit">Login</Button>
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <Container sx={{ marginTop: 4 }}>
         <Outlet />
-      </main>
-    </div>
+      </Container>
+    </>
   );
 };
 

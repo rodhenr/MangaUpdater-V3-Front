@@ -38,7 +38,7 @@ export interface IColumn {
 
 export interface IRow {
   id: number;
-  [key: string]: string | number;
+  [key: string]: string | number | null;
 }
 
 export interface IMangaPost {
@@ -57,4 +57,26 @@ export interface IMangaSourcePost {
   mangaId: number;
   sourceId: number;
   url: string;
+}
+
+export interface ILog {
+  id: number;
+  timestamp: Date;
+  module: string;
+  level: number;
+  message: string;
+  exception: string | null;
+}
+
+export interface IUserData {
+  myAnimeListId: number | null;
+  urlMyAnimeList: string | null;
+  anilistId: number | null;
+  urlAnilist: string | null;
+  titleRomaji: string;
+  titleEnglish: string;
+  sourceLastChapterNumber: number | null;
+  sourceLastChapterDate: Date | null;
+  userLastChapterNumber: number;
+  coverUrl: string;
 }
