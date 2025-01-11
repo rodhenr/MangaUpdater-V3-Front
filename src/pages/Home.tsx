@@ -1,30 +1,23 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Typography,
-} from "@mui/material";
+import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { useQuery } from "@tanstack/react-query";
+import { useLocalStorage } from "@uidotdev/usehooks";
 import React, { useEffect, useState } from "react";
 import { fetchUserData } from "../api/queries/Queries";
 import { IUserData } from "../interfaces/interfaces";
 
 const Home: React.FC = () => {
   const [data, setData] = useState<IUserData[] | null>(null);
-  const [userName, setUserName] = useState<string | null>(null);
+  const [username] = useLocalStorage<string | null>("username", null);
 
   const {
     data: userDataList,
     error,
     isLoading,
   } = useQuery({
-    queryKey: ["userData", userName],
-    queryFn: () => fetchUserData(userName!),
-    enabled: !!userName,
+    queryKey: ["userData", username],
+    queryFn: () => fetchUserData(username!),
+    enabled: !!username,
   });
 
   useEffect(() => {
@@ -66,7 +59,7 @@ const Home: React.FC = () => {
           >
             <Card
               sx={{
-                borderWidth: "1px",
+                borderWidth: "2px",
                 borderStyle: "solid",
                 borderColor:
                   userData.sourceLastChapterNumber === null
@@ -96,23 +89,27 @@ const Home: React.FC = () => {
                   flex: 1,
                   gap: "0.75rem",
                   justifyContent: "space-between",
+                  height: 100,
                   padding: "0.5rem 1rem !important",
                 }}
               >
                 <Typography
-                  variant="body1"
+                  variant="body2"
                   component="div"
                   sx={{ fontWeight: "bold" }}
                 >
                   {userData.titleEnglish || userData.titleRomaji}
                 </Typography>
 
-                <div>
-                  <Typography variant="body2" color={"success"}>
-                    <strong>
-                      Source: {userData.sourceLastChapterNumber ?? "N/A"}
-                    </strong>
-                  </Typography>
+                <Box
+                  component="div"
+                  sx={{
+                    alignItems: "flex-end",
+                    display: "flex",
+                    flex: 1,
+                    justifyContent: "center",
+                  }}
+                >
                   <Typography
                     variant="body2"
                     color={
@@ -121,11 +118,13 @@ const Home: React.FC = () => {
                         ? "success"
                         : "warning"
                     }
+                    sx={{ fontWeight: "bold" }}
                   >
-                    <strong>User: {userData.userLastChapterNumber}</strong>
+                    Progress: {userData.userLastChapterNumber} of{" "}
+                    {userData.sourceLastChapterNumber ?? "N/A"}
                   </Typography>
-
-                  <Typography
+                </Box>
+                {/* <Typography
                     variant="body2"
                     color={
                       userData.sourceLastChapterNumber
@@ -140,69 +139,7 @@ const Home: React.FC = () => {
                           userData.sourceLastChapterDate
                         ).toLocaleDateString()
                       : "N/A"}
-                  </Typography>
-
-                  <CardActions
-                    sx={{
-                      display: "flex",
-                      gap: "0.5rem",
-                      padding: "0 !important",
-                    }}
-                  >
-                    {userData.urlMyAnimeList && (
-                      <Button
-                        href={userData.urlMyAnimeList}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        sx={{
-                          height: 25,
-                          margin: "0 !important",
-                          padding: "0 !important",
-                          width: "100%",
-                        }}
-                      >
-                        <Box
-                          component="img"
-                          src={
-                            "https://upload.wikimedia.org/wikipedia/commons/7/7a/MyAnimeList_Logo.png"
-                          }
-                          alt={"MyAnimeList"}
-                          sx={{
-                            height: "100%",
-                            objectFit: "cover",
-                            width: "100%",
-                          }}
-                        />
-                      </Button>
-                    )}
-                    {userData.urlAnilist && (
-                      <Button
-                        href={userData.urlAnilist}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        sx={{
-                          height: 25,
-                          margin: "0 !important",
-                          padding: "0 !important",
-                          width: "100%",
-                        }}
-                      >
-                        <Box
-                          component="img"
-                          src={
-                            "https://upload.wikimedia.org/wikipedia/commons/6/61/AniList_logo.svg"
-                          }
-                          alt={"Anilist"}
-                          sx={{
-                            height: "100%",
-                            objectFit: "cover",
-                            width: "100%",
-                          }}
-                        />
-                      </Button>
-                    )}
-                  </CardActions>
-                </div>
+                  </Typography> */}
               </CardContent>
             </Card>
           </Grid>
