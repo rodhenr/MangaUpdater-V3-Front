@@ -1,6 +1,7 @@
 import {
   ILog,
   IManga,
+  IMangaData,
   IMangaSourceApi,
   ISource,
   IUserData,
@@ -15,6 +16,12 @@ export const fetchLogs = async (): Promise<ILog[]> => {
 
 export const fetchMangas = async (): Promise<IManga[]> => {
   const response = await apiClientDatabase.get<IManga[]>("api/manga");
+
+  return response.data;
+};
+
+export const fetchMangaById = async (id: number): Promise<IMangaData> => {
+  const response = await apiClientDatabase.get<IMangaData>(`api/manga/${id}`);
 
   return response.data;
 };

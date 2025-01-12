@@ -80,3 +80,19 @@ export interface IUserData {
   userLastChapterNumber: number;
   coverUrl: string;
 }
+
+export interface IMangaData {
+  coverUrl: string;
+  myAnimeListId: number | null;
+  anilistId: number;
+  titleRomaji: string;
+  titleEnglish: string;
+  chapters: IChapters[];
+}
+
+export interface IChapters {
+  sourceId: number;
+  number: number;
+  date: string;
+  url: string;
+}
