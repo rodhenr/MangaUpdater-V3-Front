@@ -1,6 +1,7 @@
 // components/MangaModal.tsx
 import {
   Box,
+  Button,
   CardMedia,
   Modal,
   Stack,
@@ -81,6 +82,58 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
             <Typography gutterBottom sx={{ fontSize: "0.8rem", flex: 1 }}>
               {data.titleRomaji}
             </Typography>
+          </Box>
+          <Box>
+            <Button
+              href={`https://myanimelist.net/manga/${mangaData?.myAnimeListId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              disabled={mangaData?.myAnimeListId === null}
+              sx={{
+                height: 25,
+                margin: "0 !important",
+                padding: "0 !important",
+                width: "100%",
+              }}
+            >
+              <Box
+                component="img"
+                src={
+                  "https://upload.wikimedia.org/wikipedia/commons/7/7a/MyAnimeList_Logo.png"
+                }
+                alt={"MyAnimeList"}
+                sx={{
+                  height: "100%",
+                  objectFit: "cover",
+                  width: "100%",
+                }}
+              />
+            </Button>
+            <Button
+              href={`https://anilist.co/manga/${mangaData?.aniListId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              disabled={mangaData?.aniListId === null}
+              sx={{
+                height: 25,
+                margin: "0 !important",
+                padding: "0 !important",
+                width: "100%",
+              }}
+            >
+              <Box
+                component="img"
+                src={
+                  "https://upload.wikimedia.org/wikipedia/commons/6/61/AniList_logo.svg"
+                }
+                alt={"Anilist"}
+                sx={{
+                  height: "100%",
+                  objectFit: "cover",
+                  width: "100%",
+                }}
+              />
+            </Button>
           </Box>
         </Stack>
 

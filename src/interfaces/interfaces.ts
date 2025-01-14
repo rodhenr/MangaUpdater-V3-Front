@@ -84,7 +84,7 @@ export interface IUserData {
 export interface IMangaData {
   coverUrl: string;
   myAnimeListId: number | null;
-  anilistId: number;
+  aniListId: number;
   titleRomaji: string;
   titleEnglish: string;
   chapters: IChapters[];
