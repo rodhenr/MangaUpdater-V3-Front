@@ -57,7 +57,7 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
           boxShadow: 24,
           color: "#fff",
           left: "50%",
-          maxWidth: 600,
+          maxWidth: 800,
           p: 3,
           position: "absolute",
           top: "50%",
@@ -75,69 +75,75 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
               objectFit: "cover",
             }}
           />
-          <Box>
-            <Typography gutterBottom sx={{ fontSize: "1.5rem", flex: 1 }}>
-              {data.titleEnglish}
-            </Typography>
-            <Typography gutterBottom sx={{ fontSize: "0.8rem", flex: 1 }}>
-              {data.titleRomaji}
-            </Typography>
-          </Box>
-          <Box>
-            <Button
-              href={`https://myanimelist.net/manga/${mangaData?.myAnimeListId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              disabled={mangaData?.myAnimeListId === null}
-              sx={{
-                height: 25,
-                margin: "0 !important",
-                padding: "0 !important",
-                width: "100%",
-              }}
-            >
-              <Box
-                component="img"
-                src={
-                  "https://upload.wikimedia.org/wikipedia/commons/7/7a/MyAnimeList_Logo.png"
-                }
-                alt={"MyAnimeList"}
+          <Box
+            display={"flex"}
+            flexDirection={"column"}
+            justifyContent={"space-between"}
+          >
+            <Box>
+              <Typography gutterBottom sx={{ fontSize: "1.5rem", flex: 1 }}>
+                {data.titleEnglish}
+              </Typography>
+              <Typography gutterBottom sx={{ fontSize: "0.8rem", flex: 1 }}>
+                {data.titleRomaji}
+              </Typography>
+            </Box>
+            <Box display={"flex"} gap={1}>
+              <Button
+                href={`https://myanimelist.net/manga/${mangaData?.myAnimeListId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                disabled={mangaData?.myAnimeListId === null}
                 sx={{
-                  height: "100%",
-                  objectFit: "cover",
-                  width: "100%",
+                  height: 25,
+                  margin: "0 !important",
+                  padding: "0 !important",
+                  width: 75,
                 }}
-              />
-            </Button>
-            <Button
-              href={`https://anilist.co/manga/${mangaData?.aniListId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              disabled={mangaData?.aniListId === null}
-              sx={{
-                height: 25,
-                margin: "0 !important",
-                padding: "0 !important",
-                width: "100%",
-              }}
-            >
-              <Box
-                component="img"
-                src={
-                  "https://upload.wikimedia.org/wikipedia/commons/6/61/AniList_logo.svg"
-                }
-                alt={"Anilist"}
+              >
+                <Box
+                  component="img"
+                  src={
+                    "https://upload.wikimedia.org/wikipedia/commons/7/7a/MyAnimeList_Logo.png"
+                  }
+                  alt={"MyAnimeList"}
+                  sx={{
+                    height: "100%",
+                    objectFit: "cover",
+                    width: "100%",
+                  }}
+                />
+              </Button>
+              <Button
+                href={`https://anilist.co/manga/${mangaData?.aniListId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                disabled={mangaData?.aniListId === null}
                 sx={{
-                  height: "100%",
-                  objectFit: "cover",
-                  width: "100%",
+                  height: 25,
+                  margin: "0 !important",
+                  padding: "0 !important",
+                  width: 75,
                 }}
-              />
-            </Button>
+              >
+                <Box
+                  component="img"
+                  src={
+                    "https://upload.wikimedia.org/wikipedia/commons/6/61/AniList_logo.svg"
+                  }
+                  alt={"Anilist"}
+                  sx={{
+                    height: "100%",
+                    objectFit: "cover",
+                    width: "100%",
+                  }}
+                />
+              </Button>
+            </Box>
           </Box>
         </Stack>
 
-        <TableContainer sx={{ maxHeight: 300, mt: 2, overflowY: "auto" }}>
+        <TableContainer sx={{ maxHeight: 350, mt: 2, overflowY: "auto" }}>
           <Table stickyHeader>
             <TableHead sx={{ bgcolor: "#000" }}>
               <TableRow>
@@ -158,8 +164,10 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
                 .sort((a, b) => b.number - a.number)
                 .map((chapter, index) => (
                   <TableRow key={index}>
-                    <TableCell>Chapter {chapter.number}</TableCell>
-                    <TableCell>
+                    <TableCell sx={{ color: "#fff" }}>
+                      Chapter {chapter.number}
+                    </TableCell>
+                    <TableCell sx={{ color: "#fff" }}>
                       {chapter.date
                         ? format(new Date(chapter.date), "yyyy-MM-dd HH:mm")
                         : "N/A"}
