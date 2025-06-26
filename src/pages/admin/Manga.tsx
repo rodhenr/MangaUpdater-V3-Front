@@ -34,6 +34,12 @@ const columns = [
     field: "titleEnglish",
     headerName: "English Title",
   },
+  {
+    isAdd: true,
+    isEditable: true,
+    field: "coverUrl",
+    headerName: "Cover URL",
+  },
 ];
 
 function Manga() {
@@ -45,6 +51,7 @@ function Manga() {
     anilistId: "",
     titleRomaji: "",
     titleEnglish: "",
+    coverUrl: "",
   });
 
   const {
@@ -65,6 +72,7 @@ function Manga() {
         anilistId: x.aniListId,
         titleEnglish: x.titleEnglish,
         titleRomaji: x.titleRomaji,
+        coverUrl: x.coverUrl,
       };
     });
 
@@ -84,6 +92,7 @@ function Manga() {
   const handleAddNewItem = async (newItem: IRow) => {
     try {
       const manga: IMangaPost = {
+        coverUrl: String(newItem["coverUrl"]),
         aniListId: Number(newItem["anilistId"]),
         myAnimeListId: Number(newItem["myAnimeListId"]),
         titleEnglish: String(newItem["titleEnglish"]),

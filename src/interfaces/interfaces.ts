@@ -4,6 +4,7 @@ export interface IManga {
   aniListId: number;
   titleRomaji: string;
   titleEnglish: string;
+  coverUrl: string;
 }
 
 export interface ISource {
@@ -42,6 +43,7 @@ export interface IRow {
 }
 
 export interface IMangaPost {
+  coverUrl: string;
   myAnimeListId: number;
   aniListId: number;
   titleRomaji: string;
@@ -75,10 +77,14 @@ export interface IUserData {
   urlAnilist: string | null;
   titleRomaji: string;
   titleEnglish: string;
-  sourceLastChapterNumber: number | null;
+  sourceLastChapterNumber: string | null;
   sourceLastChapterDate: Date | null;
   userLastChapterNumber: number;
   coverUrl: string;
+  countryOfOrigin: string;
+  status: string;
+  score: number;
+  genres: string[];
 }
 
 export interface IMangaData {
@@ -92,7 +98,7 @@ export interface IMangaData {
 
 export interface IChapters {
   sourceId: number;
-  number: number;
+  number: string;
   date: string;
   url: string;
 }

@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import {
   ILog,
   IManga,
@@ -20,10 +21,22 @@ export const fetchMangas = async (): Promise<IManga[]> => {
   return response.data;
 };
 
-export const fetchMangaById = async (id: number): Promise<IMangaData> => {
-  const response = await apiClientDatabase.get<IMangaData>(`api/manga/${id}`);
+export const fetchMangaById = async (
+  id: number
+): Promise<IMangaData | null> => {
+  const response: AxiosResponse = await apiClientDatabase.get(
+    `api/manga/${id}`
+  );
 
-  return response.data;
+  if (
+    response.status === 204 ||
+    typeof response.data !== "object" ||
+    response.data === null
+  ) {
+    return null;
+  }
+
+  return response.data as IMangaData;
 };
 
 export const fetchSources = async (): Promise<ISource[]> => {

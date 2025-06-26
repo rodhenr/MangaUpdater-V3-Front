@@ -67,6 +67,11 @@ const Modal: React.FC<ModalProps> = ({
               onChange={handleInputChange}
               fullWidth
               margin="normal"
+              sx={{
+                "& .MuiInputBase-input": {
+                  color: "black !important",
+                },
+              }}
             />
           ))}
       </DialogContent>
