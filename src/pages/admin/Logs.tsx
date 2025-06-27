@@ -1,9 +1,8 @@
+import { Alert, Box, CircularProgress, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import React from "react";
 import { fetchLogs } from "../../api/queries/Queries";
 import EditableTable from "../../components/dataGrid/EditableTable";
-import { IData, IRow } from "../../interfaces/interfaces";
-import "../../styles/Logs.scss";
 
 const columns = [
   { isAdd: false, isEditable: false, field: "id", headerName: "ID" },
@@ -13,24 +12,9 @@ const columns = [
     field: "timestamp",
     headerName: "Timestamp",
   },
-  {
-    isAdd: false,
-    isEditable: false,
-    field: "module",
-    headerName: "Module",
-  },
-  {
-    isAdd: false,
-    isEditable: false,
-    field: "level",
-    headerName: "Level",
-  },
-  {
-    isAdd: false,
-    isEditable: false,
-    field: "message",
-    headerName: "Message",
-  },
+  { isAdd: false, isEditable: false, field: "module", headerName: "Module" },
+  { isAdd: false, isEditable: false, field: "level", headerName: "Level" },
+  { isAdd: false, isEditable: false, field: "message", headerName: "Message" },
   {
     isAdd: false,
     isEditable: false,
@@ -39,22 +23,14 @@ const columns = [
   },
 ];
 
-function Logs() {
-  const [data, setData] = useState<IData | null>(null);
-
-  const {
-    data: logList,
-    error,
-    isLoading,
-  } = useQuery({ queryKey: ["logs"], queryFn: fetchLogs });
-
-  useEffect(() => {
-    if (!logList) return;
-
-    const rows: IRow[] = logList.map((x) => {
-      return {
-        id: x.id,
-        timestamp: new Date(x.timestamp).toLocaleString("en-US", {
+const Logs: React.FC = () => {
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["logs"],
+    queryFn: fetchLogs,
+    select: (logs) =>
+      logs.map((log) => ({
+        id: log.id,
+        timestamp: new Date(log.timestamp).toLocaleString("en-US", {
           year: "numeric",
           month: "2-digit",
           day: "2-digit",
@@ -62,28 +38,35 @@ function Logs() {
           minute: "2-digit",
           second: "2-digit",
         }),
-        module: x.module,
-        level: x.level,
-        message: x.message,
-        exception: x.exception,
-      };
-    });
+        module: log.module,
+        level: log.level,
+        message: log.message,
+        exception: log.exception,
+      })),
+  });
 
-    setData({ rows, columns });
-  }, [logList]);
+  if (isLoading)
+    return (
+      <Box display="flex" justifyContent="center" mt={4}>
+        <CircularProgress />
+      </Box>
+    );
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error instanceof Error) return <p>Error: {error.message}</p>;
+  if (error instanceof Error)
+    return (
+      <Box mt={4}>
+        <Alert severity="error">Error: {error.message}</Alert>
+      </Box>
+    );
 
   return (
-    <div className="logs-page">
-      <div>
-        {data && (
-          <EditableTable columns={data.columns} rows={data.rows} edit={false} />
-        )}
-      </div>
-    </div>
+    <Box mt={4} px={2}>
+      <Typography variant="h5" mb={2}>
+        Logs
+      </Typography>
+      {data && <EditableTable columns={columns} rows={data} edit={false} />}
+    </Box>
   );
-}
+};
 
 export default Logs;
