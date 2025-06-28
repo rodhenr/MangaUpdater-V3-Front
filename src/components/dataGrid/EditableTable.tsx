@@ -38,37 +38,6 @@ const EditableTable: React.FC<EditableTableProps> = ({ columns, rows }) => {
         columns={transformedColumns}
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[10, 20, 50, 100]}
-        sx={{
-          border: 0,
-          "& .MuiDataGrid-root": {
-            bgcolor: "#212121",
-            color: "#fff",
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            bgcolor: "#333333 !important",
-            color: "#fff !important",
-          },
-          "& .MuiDataGrid-row--borderBottom": {
-            bgcolor: "#333333 !important",
-          },
-          "& .MuiDataGrid-cell": {
-            bgcolor: "transparent",
-            color: "#fff",
-          },
-          "& .MuiDataGrid-row:hover": {
-            bgcolor: "#616161",
-          },
-          "& .MuiDataGrid-footerContainer": {
-            bgcolor: "#424242",
-            color: "#fff",
-          },
-          "& .MuiTablePagination-root": {
-            color: "#fff",
-          },
-          "& .MuiSvgIcon-root": {
-            color: "#fff",
-          },
-        }}
       />
     </Paper>
   );

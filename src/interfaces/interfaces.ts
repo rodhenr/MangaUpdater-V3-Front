@@ -5,12 +5,18 @@ export interface IManga {
   titleRomaji: string;
   titleEnglish: string;
   coverUrl: string;
+  createdAt: Date;
 }
 
 export interface ISource {
   id: number;
   name: string;
   baseUrl: string;
+}
+
+export interface ISourceDistribution {
+  mangaCount: number;
+  sourceName: string;
 }
 
 export interface IMangaSource {
@@ -61,6 +67,14 @@ export interface IMangaSourcePost {
   url: string;
 }
 
+export interface IMetric {
+  mangasCount: number;
+  sourcesCount: number;
+  RelationsCount: number;
+  logsLastDayCount: number;
+  queueCount: number;
+}
+
 export interface ILog {
   id: number;
   timestamp: Date;
@@ -68,6 +82,19 @@ export interface ILog {
   level: number;
   message: string;
   exception: string | null;
+}
+
+export interface IPagedQueryParams {
+  pageNumber: number;
+  pageSize: number;
+}
+
+export interface IPagedResult<T> {
+  items: T[];
+  totalItems: number;
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
 }
 
 export interface IUserData {

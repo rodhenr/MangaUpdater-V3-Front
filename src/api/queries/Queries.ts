@@ -1,22 +1,50 @@
+import { QueryFunction } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import {
   ILog,
   IManga,
   IMangaData,
   IMangaSourceApi,
+  IMetric,
+  IPagedQueryParams,
+  IPagedResult,
   ISource,
+  ISourceDistribution,
   IUserData,
 } from "../../interfaces/interfaces";
 import { apiClientDatabase, apiClientUser } from "../axiosClient";
 
-export const fetchLogs = async (): Promise<ILog[]> => {
-  const response = await apiClientDatabase.get<ILog[]>("api/log");
+export const fetchMetrics = async (): Promise<IMetric> => {
+  const response = await apiClientDatabase.get<IMetric>("api/metrics");
 
   return response.data;
 };
 
-export const fetchMangas = async (): Promise<IManga[]> => {
-  const response = await apiClientDatabase.get<IManga[]>("api/manga");
+export const fetchLogs: QueryFunction<
+  IPagedResult<ILog>,
+  readonly [string, IPagedQueryParams]
+> = async ({ queryKey }) => {
+  const [, { pageNumber, pageSize }] = queryKey;
+
+  const response = await apiClientDatabase.get<IPagedResult<ILog>>("api/log", {
+    params: { pageNumber, pageSize },
+  });
+
+  return response.data;
+};
+
+export const fetchMangas: QueryFunction<
+  IPagedResult<IManga>,
+  readonly [string, IPagedQueryParams]
+> = async ({ queryKey }) => {
+  const [, { pageNumber, pageSize }] = queryKey;
+
+  const response = await apiClientDatabase.get<IPagedResult<IManga>>(
+    "api/manga",
+    {
+      params: { pageNumber, pageSize },
+    }
+  );
 
   return response.data;
 };
@@ -41,6 +69,16 @@ export const fetchMangaById = async (
 
 export const fetchSources = async (): Promise<ISource[]> => {
   const response = await apiClientDatabase.get<ISource[]>("api/source");
+
+  return response.data;
+};
+
+export const fetchSourceDistribution = async (): Promise<
+  ISourceDistribution[]
+> => {
+  const response = await apiClientDatabase.get<ISourceDistribution[]>(
+    "api/mangaSource/manga-distribution"
+  );
 
   return response.data;
 };

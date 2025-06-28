@@ -3,7 +3,7 @@ import {
   Button,
   CardMedia,
   CircularProgress,
-  Grid2,
+  Grid,
   Link,
   Modal,
   Table,
@@ -143,8 +143,8 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
           </Box>
         ) : (
           <>
-            <Grid2 container spacing={3}>
-              <Grid2>
+            <Grid container spacing={3}>
+              <Grid>
                 <CardMedia
                   component="img"
                   image={data.coverUrl}
@@ -157,9 +157,9 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
                     boxShadow: "0 8px 20px rgba(0,0,0,0.8)",
                   }}
                 />
-              </Grid2>
+              </Grid>
 
-              <Grid2>
+              <Grid>
                 <Box
                   sx={{
                     display: "flex",
@@ -232,8 +232,8 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
                     </Button>
                   </Box>
                 </Box>
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
 
             <TableContainer
               sx={{

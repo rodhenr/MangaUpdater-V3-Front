@@ -3,12 +3,10 @@ import {
   ChevronRight,
   Home,
   ListAlt,
-  Menu,
   MenuBook,
   Queue,
 } from "@mui/icons-material";
 import {
-  AppBar,
   Box,
   CssBaseline,
   Divider,
@@ -55,7 +53,7 @@ const LayoutAdmin: React.FC = () => {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        bgcolor: "#1B1B1F",
+        bgcolor: "#0B0D11",
         color: "white",
       }}
     >
@@ -125,27 +123,6 @@ const LayoutAdmin: React.FC = () => {
   return (
     <Box sx={{ display: "flex", bgcolor: "#121212", minHeight: "100vh" }}>
       <CssBaseline />
-      {!isSmUp && (
-        <AppBar
-          position="fixed"
-          sx={{ bgcolor: "#1B1B1F", zIndex: theme.zIndex.drawer + 1 }}
-        >
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2 }}
-            >
-              <Menu />
-            </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              Admin Panel
-            </Typography>
-          </Toolbar>
-        </AppBar>
-      )}
       <Drawer
         variant={isSmUp ? "permanent" : "temporary"}
         open={isSmUp ? true : mobileOpen}
@@ -179,7 +156,7 @@ const LayoutAdmin: React.FC = () => {
             sm: `calc(100% - ${collapsed ? collapsedWidth : expandedWidth}px)`,
           },
           color: "white",
-          backgroundColor: "#121212",
+          backgroundColor: "#121418",
           minHeight: "100vh",
           mt: !isSmUp ? 7 : 0,
           transition: theme.transitions.create("width", {

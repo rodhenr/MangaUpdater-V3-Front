@@ -24,12 +24,16 @@ const columns = [
 ];
 
 const Logs: React.FC = () => {
+  const pageNumber = 1;
+  const pageSize = 100;
+
   const { data, error, isLoading } = useQuery({
-    queryKey: ["logs"],
+    queryKey: ["logs", { pageNumber, pageSize }],
     queryFn: fetchLogs,
-    select: (logs) =>
-      logs.map((log) => ({
-        id: log.id,
+    select: (result) => ({
+      ...result,
+      items: result.items.map((log) => ({
+        ...log,
         timestamp: new Date(log.timestamp).toLocaleString("en-US", {
           year: "numeric",
           month: "2-digit",
@@ -38,11 +42,8 @@ const Logs: React.FC = () => {
           minute: "2-digit",
           second: "2-digit",
         }),
-        module: log.module,
-        level: log.level,
-        message: log.message,
-        exception: log.exception,
       })),
+    }),
   });
 
   if (isLoading)
@@ -64,7 +65,9 @@ const Logs: React.FC = () => {
       <Typography variant="h5" mb={2}>
         Logs
       </Typography>
-      {data && <EditableTable columns={columns} rows={data} edit={false} />}
+      {data && (
+        <EditableTable columns={columns} rows={data.items} edit={false} />
+      )}
     </Box>
   );
 };

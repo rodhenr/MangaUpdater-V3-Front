@@ -12,11 +12,11 @@ import {
   CardMedia,
   Chip,
   CircularProgress,
+  Grid,
   InputBase,
   Tooltip,
   Typography,
 } from "@mui/material";
-import Grid from "@mui/material/Grid2";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import React, { useEffect, useState } from "react";

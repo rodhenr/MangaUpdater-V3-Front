@@ -54,18 +54,24 @@ function Manga() {
     coverUrl: "",
   });
 
+  const pageNumber = 1;
+  const pageSize = 100;
+
   const {
     data: mangaList,
     error,
     isLoading,
-  } = useQuery({ queryKey: ["manga"], queryFn: fetchMangas });
+  } = useQuery({
+    queryKey: ["manga", { pageNumber, pageSize }],
+    queryFn: fetchMangas,
+  });
 
   const mutation = useMutation({ mutationFn: postManga });
 
   useEffect(() => {
     if (!mangaList) return;
 
-    const rows: IRow[] = mangaList.map((x) => {
+    const rows: IRow[] = mangaList.items.map((x) => {
       return {
         id: x.id,
         myAnimeListId: x.myAnimeListId,
