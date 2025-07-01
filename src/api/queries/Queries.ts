@@ -1,10 +1,12 @@
 import { QueryFunction } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import {
+  IChaptersLog,
   ILog,
   IManga,
   IMangaData,
   IMangaSourceApi,
+  IMangaUpdate,
   IMetric,
   IPagedQueryParams,
   IPagedResult,
@@ -94,6 +96,34 @@ export const fetchMangaSources = async (): Promise<IMangaSourceApi[]> => {
 export const fetchUserData = async (user: string): Promise<IUserData[]> => {
   const response = await apiClientUser.get<IUserData[]>(
     `api/info/user/${user}/chapters`
+  );
+
+  return response.data;
+};
+
+export const fetchChaptersLog: QueryFunction<
+  IPagedResult<IChaptersLog>,
+  readonly [string, IPagedQueryParams]
+> = async ({ queryKey }) => {
+  const [, { pageNumber, pageSize }] = queryKey;
+
+  const response = await apiClientDatabase.get<IPagedResult<IChaptersLog>>(
+    "api/chapters",
+    {
+      params: { pageNumber, pageSize },
+    }
+  );
+
+  return response.data;
+};
+
+export const updateMangaData = async (
+  mangaId: number,
+  data: IMangaUpdate
+): Promise<void> => {
+  const response = await apiClientDatabase.put<void>(
+    `api/manga/${mangaId}`,
+    data
   );
 
   return response.data;

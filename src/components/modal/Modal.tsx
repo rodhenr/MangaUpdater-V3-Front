@@ -1,14 +1,15 @@
-// components/modal/Modal.tsx
 import {
+  Alert,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { IColumn, IRow } from "../../interfaces/interfaces";
+import { IColumn, IModalMessage, IRow } from "../../interfaces/interfaces";
 
 interface ModalProps {
   open: boolean;
@@ -16,6 +17,10 @@ interface ModalProps {
   onAdd: (newItem: IRow) => void;
   columns: IColumn[];
   existingData: IRow | null;
+  loading?: boolean;
+  error?: string;
+  message: IModalMessage | null;
+  setMessage: React.Dispatch<React.SetStateAction<IModalMessage | null>>;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -24,6 +29,10 @@ const Modal: React.FC<ModalProps> = ({
   onAdd,
   columns,
   existingData,
+  loading = false,
+  error = "",
+  message,
+  setMessage,
 }) => {
   const [newItem, setNewItem] = useState<IRow>({ id: 0 });
 
@@ -40,6 +49,7 @@ const Modal: React.FC<ModalProps> = ({
   }, [columns, existingData]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(null);
     const { name, value } = e.target;
     setNewItem((prev) => ({
       ...prev,
@@ -49,11 +59,15 @@ const Modal: React.FC<ModalProps> = ({
 
   const handleSave = () => {
     onAdd(newItem);
-    onClose();
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+      {message && (
+        <Alert severity={message.type} sx={{ mb: 2 }}>
+          {message.text}
+        </Alert>
+      )}
       <DialogTitle>{existingData ? "Edit Item" : "Add New Item"}</DialogTitle>
       <DialogContent>
         {columns
@@ -67,19 +81,22 @@ const Modal: React.FC<ModalProps> = ({
               onChange={handleInputChange}
               fullWidth
               margin="normal"
-              sx={{
-                "& .MuiInputBase-input": {
-                  color: "black !important",
-                },
-              }}
+              disabled={loading}
+              error={Boolean(error)}
             />
           ))}
+
+        {error && (
+          <Typography color="error" mt={1}>
+            {error}
+          </Typography>
+        )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">
+        <Button onClick={onClose} color="secondary" disabled={loading}>
           Cancel
         </Button>
-        <Button onClick={handleSave} color="primary">
+        <Button onClick={handleSave} color="primary" disabled={loading}>
           {existingData ? "Save Changes" : "Add"}
         </Button>
       </DialogActions>

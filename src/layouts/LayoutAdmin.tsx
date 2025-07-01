@@ -35,6 +35,7 @@ const menuItems = [
   { text: "Manga", icon: <MenuBook />, to: "/admin/manga" },
   { text: "Source", icon: <MenuBook />, to: "/admin/source" },
   { text: "Manga Source", icon: <MenuBook />, to: "/admin/mangasource" },
+  { text: "Configuration", icon: <MenuBook />, to: "/admin/mangasource" },
 ];
 
 const LayoutAdmin: React.FC = () => {

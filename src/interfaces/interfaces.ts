@@ -129,3 +129,24 @@ export interface IChapters {
   date: string;
   url: string;
 }
+
+export interface IChaptersLog {
+  chapterId: number;
+  manga: string;
+  source: string;
+  number: string;
+  timestamp: Date;
+}
+
+export interface IModalMessage {
+  type: "success" | "error";
+  text: string;
+}
+
+export interface IMangaUpdate {
+  myAnimeListId: number;
+  aniListId: number;
+  titleRomaji: string;
+  titleEnglish: string;
+  coverUrl: string;
+}

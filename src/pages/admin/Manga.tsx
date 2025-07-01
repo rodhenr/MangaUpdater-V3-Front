@@ -1,12 +1,30 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Pagination,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { postManga } from "../../api/commands/Commands";
-import { fetchMangas } from "../../api/queries/Queries";
-import BaseButton from "../../components/button/BaseButton";
-import EditableTable from "../../components/dataGrid/EditableTable";
+import { fetchMangas, updateMangaData } from "../../api/queries/Queries";
 import Modal from "../../components/modal/Modal";
-import { IData, IMangaPost, IRow } from "../../interfaces/interfaces";
-import "../../styles/Manga.scss";
+import {
+  IManga,
+  IMangaPost,
+  IMangaUpdate,
+  IModalMessage,
+  IRow,
+} from "../../interfaces/interfaces";
 
 const columns = [
   { isAdd: false, isEditable: false, field: "id", headerName: "ID" },
@@ -19,7 +37,7 @@ const columns = [
   {
     isAdd: true,
     isEditable: true,
-    field: "anilistId",
+    field: "aniListId",
     headerName: "ID Anilist",
   },
   {
@@ -42,20 +60,13 @@ const columns = [
   },
 ];
 
-function Manga() {
-  const [data, setData] = useState<IData | null>(null);
+export default function MangaPage() {
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageSize = 12;
   const [openModal, setOpenModal] = useState(false);
-  const [newItem, setNewItem] = useState<IRow | null>({
-    id: 0,
-    myAnimeListId: "",
-    anilistId: "",
-    titleRomaji: "",
-    titleEnglish: "",
-    coverUrl: "",
-  });
-
-  const pageNumber = 1;
-  const pageSize = 100;
+  const [newItem, setNewItem] = useState<IRow | null>(null);
+  const queryClient = useQueryClient();
+  const [message, setMessage] = useState<IModalMessage | null>(null);
 
   const {
     data: mangaList,
@@ -66,62 +77,155 @@ function Manga() {
     queryFn: fetchMangas,
   });
 
-  const mutation = useMutation({ mutationFn: postManga });
+  const mutation = useMutation({
+    mutationFn: postManga,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["manga"] });
+    },
+    onError: () => {},
+  });
 
-  useEffect(() => {
-    if (!mangaList) return;
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: IMangaUpdate }) =>
+      updateMangaData(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["manga"] });
+    },
+    onError: () => {},
+  });
 
-    const rows: IRow[] = mangaList.items.map((x) => {
-      return {
-        id: x.id,
-        myAnimeListId: x.myAnimeListId,
-        anilistId: x.aniListId,
-        titleEnglish: x.titleEnglish,
-        titleRomaji: x.titleRomaji,
-        coverUrl: x.coverUrl,
+  const handleOpenModal = (item: IRow | IManga | null = null) => {
+    setMessage(null);
+
+    if (item === null) {
+      setNewItem(item);
+    } else {
+      const newItem = {
+        id: Number(item["id"]),
+        coverUrl: String(item["coverUrl"]),
+        aniListId: Number(item["aniListId"]),
+        myAnimeListId: Number(item["myAnimeListId"]),
+        titleEnglish: String(item["titleEnglish"]),
+        titleRomaji: String(item["titleRomaji"]),
       };
-    });
 
-    setData({ rows, columns });
-  }, [mangaList]);
+      setNewItem(newItem);
+    }
 
-  const handleOpenModal = () => {
-    setNewItem(null);
     setOpenModal(true);
   };
 
   const handleCloseModal = () => {
+    setOpenModal(false);
     setNewItem(null);
-    setOpenModal(false);
   };
 
-  const handleAddNewItem = async (newItem: IRow) => {
+  const handleAddNewItem = async (item: IRow) => {
+    const mangaData: IMangaPost | IMangaUpdate = {
+      coverUrl: String(item.coverUrl),
+      aniListId: Number(item.aniListId),
+      myAnimeListId: Number(item.myAnimeListId),
+      titleEnglish: String(item.titleEnglish),
+      titleRomaji: String(item.titleRomaji),
+    };
+
+    const isEditing = !!item.id;
+
     try {
-      const manga: IMangaPost = {
-        coverUrl: String(newItem["coverUrl"]),
-        aniListId: Number(newItem["anilistId"]),
-        myAnimeListId: Number(newItem["myAnimeListId"]),
-        titleEnglish: String(newItem["titleEnglish"]),
-        titleRomaji: String(newItem["titleRomaji"]),
-      };
+      if (isEditing) {
+        await updateMutation.mutateAsync({ id: item.id!, data: mangaData });
+        setMessage({ type: "success", text: "Manga updated successfully!" });
+      } else {
+        await mutation.mutateAsync(mangaData);
+        setMessage({ type: "success", text: "Manga created successfully!" });
 
-      await mutation.mutateAsync(manga);
-    } catch (err) {
-      alert(err);
+        setTimeout(() => {
+          handleCloseModal();
+        }, 2000);
+      }
+    } catch {
+      setMessage({
+        type: "error",
+        text: isEditing
+          ? "Failed to update manga. Please try again."
+          : "Failed to create manga. Please try again.",
+      });
     }
-
-    setOpenModal(false);
   };
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error instanceof Error) return <p>Error: {error.message}</p>;
+  if (isLoading) {
+    return (
+      <Stack alignItems="center" mt={4}>
+        <CircularProgress />
+      </Stack>
+    );
+  }
+
+  if (error) {
+    return (
+      <Stack alignItems="center" mt={4}>
+        <Typography color="error">Failed to load mangas.</Typography>
+      </Stack>
+    );
+  }
 
   return (
-    <div>
-      <BaseButton onClick={handleOpenModal} text="Add" />
-      {data && (
-        <EditableTable columns={data.columns} rows={data.rows} edit={true} />
-      )}
+    <Box p={4}>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+      >
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleOpenModal(null)}
+        >
+          Add New Manga
+        </Button>
+      </Stack>
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>Title</TableCell>
+              <TableCell>Created At</TableCell>
+              <TableCell align="right">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {mangaList?.items.map((manga) => (
+              <TableRow key={manga.id}>
+                <TableCell>{manga.id}</TableCell>
+                <TableCell>{manga.titleEnglish}</TableCell>
+                <TableCell>
+                  {new Date(manga.createdAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell align="right">
+                  <Button
+                    variant="outlined"
+                    onClick={() => handleOpenModal(manga)}
+                  >
+                    Edit
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Stack direction="row" justifyContent="center" mt={4}>
+        <Pagination
+          count={mangaList?.totalPages || 0}
+          page={pageNumber}
+          onChange={(_, page) => setPageNumber(page)}
+          color="primary"
+        />
+      </Stack>
 
       <Modal
         open={openModal}
@@ -129,9 +233,9 @@ function Manga() {
         onAdd={handleAddNewItem}
         columns={columns}
         existingData={newItem}
+        message={message}
+        setMessage={setMessage}
       />
-    </div>
+    </Box>
   );
 }
-
-export default Manga;

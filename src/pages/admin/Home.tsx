@@ -21,12 +21,14 @@ import {
   Tooltip,
 } from "recharts";
 import {
+  fetchChaptersLog,
   fetchLogs,
   fetchMangas,
   fetchMetrics,
   fetchSourceDistribution,
 } from "../../api/queries/Queries";
 import {
+  IChaptersLog,
   IManga,
   IMetric,
   ISourceDistribution,
@@ -163,6 +165,46 @@ const mangaColumns: GridColDef<IManga>[] = [
   },
 ];
 
+const chaptersColumns: GridColDef<IChaptersLog>[] = [
+  {
+    field: "manga",
+    headerName: "Manga",
+    flex: 1,
+  },
+  {
+    field: "source",
+    headerName: "Source",
+    flex: 1,
+  },
+  {
+    field: "number",
+    headerName: "Number",
+    flex: 1,
+  },
+  {
+    field: "createdAt",
+    headerName: "Added Date",
+    minWidth: 150,
+    renderCell: (params: GridRenderCellParams<IChaptersLog>) => {
+      const createdAt = params.row.timestamp;
+
+      if (!createdAt) return "-";
+
+      const date = new Date(createdAt);
+
+      if (isNaN(date.getTime())) return "-";
+
+      return date.toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    },
+  },
+];
+
 const DashboardHome: React.FC = () => {
   const { data: metricsData, isLoading: isMetricsLoading } = useQuery({
     queryKey: ["metrics"],
@@ -193,6 +235,11 @@ const DashboardHome: React.FC = () => {
     queryFn: fetchMangas,
   });
 
+  const { data: chaptersData, isLoading: isChaptersLoading } = useQuery({
+    queryKey: ["chaptersLog", { pageNumber: 1, pageSize: 5 }],
+    queryFn: fetchChaptersLog,
+  });
+
   const {
     data: mangaSourceDistribution,
     isLoading: isMangaSourceDistributionLoading,
@@ -206,10 +253,12 @@ const DashboardHome: React.FC = () => {
     isLogsLoading ||
     isMangasLoading ||
     isMangaSourceDistributionLoading ||
+    isChaptersLoading ||
     logsData === undefined ||
     metricsData === undefined ||
     mangasData === undefined ||
-    mangaSourceDistribution === undefined
+    mangaSourceDistribution === undefined ||
+    chaptersData === undefined
   )
     return <></>;
 
@@ -302,25 +351,53 @@ const DashboardHome: React.FC = () => {
           </Grid>
         </Grid>
 
-        <Grid size={{ xs: 12 }}>
-          <Paper
-            sx={{
-              bgcolor: "#2A2E3E",
-              p: 3,
-              borderRadius: 4,
-              boxShadow: 3,
-            }}
-          >
-            <Typography variant="h6" mb={2} color="white">
-              Latest Mangas
-            </Typography>
-            <DataGrid
-              rows={mangasData.items}
-              columns={mangaColumns}
-              hideFooter
-              disableRowSelectionOnClick
-            />
-          </Paper>
+        <Grid
+          container
+          spacing={3}
+          size={{ xs: 12, md: 12 }}
+          sx={{ display: "flex", gap: 3 }}
+        >
+          <Grid size={{ xs: 6 }}>
+            <Paper
+              sx={{
+                bgcolor: "#2A2E3E",
+                p: 3,
+                borderRadius: 4,
+                boxShadow: 3,
+              }}
+            >
+              <Typography variant="h6" mb={2} color="white">
+                Latest Mangas
+              </Typography>
+              <DataGrid
+                rows={mangasData.items}
+                columns={mangaColumns}
+                hideFooter
+                disableRowSelectionOnClick
+              />
+            </Paper>
+          </Grid>
+          <Grid size={{ xs: 6 }}>
+            <Paper
+              sx={{
+                bgcolor: "#2A2E3E",
+                p: 3,
+                borderRadius: 4,
+                boxShadow: 3,
+              }}
+            >
+              <Typography variant="h6" mb={2} color="white">
+                Latest Chapters
+              </Typography>
+              <DataGrid
+                rows={chaptersData.items}
+                columns={chaptersColumns}
+                getRowId={(row) => row.chapterId}
+                hideFooter
+                disableRowSelectionOnClick
+              />
+            </Paper>
+          </Grid>
         </Grid>
       </Grid>
     </>
