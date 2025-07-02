@@ -17,7 +17,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import React from "react";
-import { fetchMangaById } from "../../api/queries/Queries";
+import { fetchMangaById } from "../../api/manga/manga.queries";
 import { parseStringToNumber } from "../../utils/Utils";
 
 interface MangaModalProps {
@@ -29,7 +29,7 @@ interface MangaModalProps {
 const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
   const { data, error, isLoading } = useQuery({
     queryKey: ["mangaData", id],
-    queryFn: () => fetchMangaById(id),
+    queryFn: fetchMangaById(id),
     enabled: !!id,
   });
 
