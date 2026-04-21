@@ -1,4 +1,4 @@
-import { Route } from "react-router";
+import { Route } from "react-router-dom";
 import { LayoutAdmin } from "./layouts/LayoutAdmin";
 import { Home } from "./pages/Home";
 import { Logs } from "./pages/Logs";

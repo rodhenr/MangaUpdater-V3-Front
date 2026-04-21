@@ -23,7 +23,7 @@ import {
   useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Link, Outlet, useLocation } from "react-router";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 const expandedWidth = 240;
 const collapsedWidth = 72;
