@@ -5,6 +5,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  MenuItem,
   TextField,
   Typography,
 } from "@mui/material";
@@ -79,11 +80,18 @@ const Modal: React.FC<ModalProps> = ({
               name={column.field}
               value={newItem[column.field] || ""}
               onChange={handleInputChange}
+              select={column.inputType === "select"}
               fullWidth
               margin="normal"
               disabled={loading}
               error={Boolean(error)}
-            />
+            >
+              {column.options?.map((option) => (
+                <MenuItem key={`${column.field}-${option.value}`} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
           ))}
 
         {error && (

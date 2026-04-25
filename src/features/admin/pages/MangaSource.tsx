@@ -30,6 +30,7 @@ import {
   ICreateMangaSourceData,
   IPagedMangaSourceResponse,
 } from "../../../api/mangasource/mangasource.types";
+import { SOURCE_OPTIONS } from "../../../api/source/source.types";
 import Modal from "../../../components/modal/Modal";
 import { IModalMessage, IRow } from "../../../interfaces/interfaces";
 
@@ -37,7 +38,14 @@ const columns = [
   { isAdd: false, isEditable: false, field: "id", headerName: "ID" },
   { isAdd: true, isEditable: true, field: "mangaId", headerName: "ID Manga" },
   { isAdd: false, isEditable: false, field: "mangaName", headerName: "Manga" },
-  { isAdd: true, isEditable: true, field: "sourceId", headerName: "ID Source" },
+  {
+    isAdd: true,
+    isEditable: true,
+    field: "sourceId",
+    headerName: "Source",
+    inputType: "select" as const,
+    options: SOURCE_OPTIONS,
+  },
   {
     isAdd: false,
     isEditable: false,

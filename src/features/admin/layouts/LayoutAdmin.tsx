@@ -3,6 +3,7 @@ import {
   ChevronRight,
   Home,
   ListAlt,
+  Logout,
   MenuBook,
   Queue,
 } from "@mui/icons-material";
@@ -24,6 +25,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import { useAdminAuth } from "../auth/AuthContext";
 
 const expandedWidth = 240;
 const collapsedWidth = 72;
@@ -44,9 +46,14 @@ export const LayoutAdmin: React.FC = () => {
   const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const { logout, user } = useAdminAuth();
 
   const handleDrawerToggle = () => setMobileOpen((prev) => !prev);
   const toggleCollapsed = () => setCollapsed((prev) => !prev);
+  const handleLogout = () => {
+    logout();
+    setMobileOpen(false);
+  };
 
   const drawer = (
     <Box
@@ -117,6 +124,31 @@ export const LayoutAdmin: React.FC = () => {
             {!collapsed && <ListItemText primary={text} />}
           </ListItemButton>
         ))}
+      </List>
+      <Divider sx={{ borderColor: "#333" }} />
+      <List>
+        <ListItemButton
+          onClick={handleLogout}
+          sx={{
+            color: "white",
+            justifyContent: collapsed ? "center" : "initial",
+            px: collapsed ? 1.5 : 2,
+          }}
+        >
+          <Tooltip title={collapsed ? "Sign out" : ""} placement="right">
+            <ListItemIcon
+              sx={{
+                color: "inherit",
+                minWidth: 0,
+                mr: collapsed ? 0 : 2,
+                justifyContent: "center",
+              }}
+            >
+              <Logout />
+            </ListItemIcon>
+          </Tooltip>
+          {!collapsed && <ListItemText primary={`Sign out (${user?.username})`} />}
+        </ListItemButton>
       </List>
     </Box>
   );

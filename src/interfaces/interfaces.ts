@@ -8,6 +8,13 @@ export interface IColumn {
   isEditable: boolean;
   field: string;
   headerName: string;
+  inputType?: "text" | "select";
+  options?: IColumnOption[];
+}
+
+export interface IColumnOption {
+  label: string;
+  value: number | string;
 }
 
 export interface IRow {
