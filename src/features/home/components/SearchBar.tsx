@@ -21,8 +21,8 @@ export const SearchBar: React.FC<Props> = ({
       display="flex"
       justifyContent="center"
       alignItems="center"
-      gap={1}
-      mb={4}
+      gap={0.75}
+      mb={2.5}
       px={2}
     >
       <InputBase
@@ -31,11 +31,11 @@ export const SearchBar: React.FC<Props> = ({
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyPress}
         sx={{
-          width: { xs: "100%", sm: 300, md: 350, lg: 400 },
-          height: 44,
-          px: 1.5,
-          borderRadius: "10px",
-          fontSize: "0.9rem",
+          width: { xs: "100%", sm: 280, md: 320, lg: 360 },
+          height: 38,
+          px: 1.25,
+          borderRadius: "9px",
+          fontSize: "0.85rem",
           color: "#eceff1",
           backgroundColor: "rgba(255, 255, 255, 0.06)",
           backdropFilter: "blur(6px)",
@@ -58,12 +58,12 @@ export const SearchBar: React.FC<Props> = ({
         variant="contained"
         onClick={onSearch}
         sx={{
-          minWidth: 80,
-          height: 44,
-          px: 2,
+          minWidth: 72,
+          height: 38,
+          px: 1.75,
           borderRadius: "8px",
           fontWeight: 600,
-          fontSize: "0.9rem",
+          fontSize: "0.82rem",
           textTransform: "none",
           color: "#90a4ae",
           backgroundColor: "transparent",

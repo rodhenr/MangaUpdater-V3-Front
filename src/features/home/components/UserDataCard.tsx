@@ -28,10 +28,12 @@ export const UserDataCard = ({ data, onClick }: Props) => {
   const current = data.userLastChapterNumber;
   const greaterThan = current > total;
   const isCompleted = total === current;
+  const title = data.titleEnglish || data.titleRomaji;
+  const titleFontSize = title.length > 100 ? "0.76rem" : "0.84rem";
 
   return (
     <Grid
-      size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}
+      size={{ xs: 12, sm: 7, md: 4, lg: 3, xl: 1 }}
       sx={{
         opacity: data.sourceLastChapterDate ? 1 : 0.6,
         filter: data.sourceLastChapterDate ? "none" : "grayscale(100%)",
@@ -55,7 +57,12 @@ export const UserDataCard = ({ data, onClick }: Props) => {
           height: "100%",
         }}
       >
-        <Box sx={{ position: "relative", height: 350 }}>
+        <Box
+          sx={{
+            position: "relative",
+            height: { xs: 370, sm: 390, lg: 410 },
+          }}
+        >
           <CardMedia
             component="img"
             src={data.coverUrl}
@@ -124,7 +131,7 @@ export const UserDataCard = ({ data, onClick }: Props) => {
               sx={{
                 position: "absolute",
                 top: 8,
-                right: 8,
+                left: 8,
                 backgroundColor: "rgba(0, 0, 0, 0.65)",
                 padding: "4px 8px",
                 borderRadius: "8px",
@@ -133,22 +140,34 @@ export const UserDataCard = ({ data, onClick }: Props) => {
                 border: "1px solid rgba(255,255,255,0.1)",
                 display: "flex",
                 alignItems: "center",
+                lineHeight: 1,
                 gap: "4px",
                 zIndex: 2,
               }}
             >
-              <StarIcon fontSize="small" />
-              {data.score}
+              <StarIcon fontSize="small" sx={{ color: "#fdd835" }} />
+              <Box component="span" sx={{ display: "block", lineHeight: 1 }}>
+                {data.score}
+              </Box>
             </Box>
 
             <Box sx={{ marginTop: "2rem" }}>
-              <Tooltip title={data.titleEnglish || data.titleRomaji}>
+              <Tooltip title={title}>
                 <Typography
                   variant="body2"
-                  sx={{ fontWeight: "bold", fontSize: "0.95rem", mb: "0.3rem" }}
-                  noWrap
+                  sx={{
+                    fontWeight: "bold",
+                    fontSize: titleFontSize,
+                    lineHeight: 1.2,
+                    maxWidth: "100%",
+                    overflow: "hidden",
+                    whiteSpace: "normal",
+                    overflowWrap: "anywhere",
+                    wordBreak: "break-word",
+                    mb: "0.3rem",
+                  }}
                 >
-                  {data.titleEnglish || data.titleRomaji}
+                  {title}
                 </Typography>
               </Tooltip>
 

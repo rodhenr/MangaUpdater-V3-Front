@@ -10,6 +10,7 @@ export const LayoutHome: React.FC = () => {
         <Toolbar
           sx={{
             justifyContent: "space-between",
+            minHeight: { xs: 48, md: 54 },
             px: { xs: 8, sm: 8, md: 8, lg: 24 },
           }}
         >
@@ -21,7 +22,7 @@ export const LayoutHome: React.FC = () => {
               gap: "0.1em",
               m: 0,
               fontFamily: "Inter, system-ui, Avenir, Helvetica, Arial, sans-serif",
-              fontSize: "clamp(1.75rem, 1.2rem + 1.75vw, 2.25rem)",
+              fontSize: "clamp(1.25rem, 0.95rem + 1vw, 1.65rem)",
               fontWeight: 700,
               lineHeight: 1,
               letterSpacing: "-0.04em",
@@ -47,7 +48,7 @@ export const LayoutHome: React.FC = () => {
       </AppBar>
       <Container
         maxWidth={false}
-        sx={{ marginTop: 4, px: { xs: 8, sm: 8, md: 8, lg: 24 } }}
+        sx={{ marginTop: 2, px: { xs: 8, sm: 8, md: 8, lg: 24 } }}
       >
         <Outlet />
       </Container>

@@ -17,7 +17,12 @@ export const UserDataGrid = ({ data, onCardClick }: Props) => {
   }
 
   return (
-    <Grid container spacing={2} sx={{ marginBottom: "2rem" }}>
+    <Grid
+      container
+      spacing={2}
+      columns={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 10 }}
+      sx={{ marginBottom: "2rem" }}
+    >
       {data.map((userData) => (
         <UserDataCard
           key={userData.anilistId}
