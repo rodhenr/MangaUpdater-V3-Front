@@ -2,6 +2,7 @@ import { Paper, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import React from "react";
 import { IPagedChaptersResponse } from "../../../api/chapters/chapters.types";
+import { adminDataGridSx, adminDataSurfaceSx } from "../admin.helpers";
 import { chaptersColumns } from "../columns/ChaptersColumn";
 
 interface ChapterTableProps {
@@ -11,14 +12,10 @@ interface ChapterTableProps {
 export const ChapterTable: React.FC<ChapterTableProps> = ({ chapters }) => {
   return (
     <Paper
-      sx={{
-        bgcolor: "#2A2E3E",
-        p: 3,
-        borderRadius: 4,
-        boxShadow: 3,
-      }}
+      elevation={0}
+      sx={{ ...adminDataSurfaceSx, p: 3, height: 420 }}
     >
-      <Typography variant="h6" mb={2} color="white">
+      <Typography variant="h6" mb={2} color="white" sx={{ fontWeight: 700 }}>
         Latest Chapters
       </Typography>
       <DataGrid
@@ -27,6 +24,7 @@ export const ChapterTable: React.FC<ChapterTableProps> = ({ chapters }) => {
         getRowId={(row) => row.chapterId}
         hideFooter
         disableRowSelectionOnClick
+        sx={adminDataGridSx}
       />
     </Paper>
   );

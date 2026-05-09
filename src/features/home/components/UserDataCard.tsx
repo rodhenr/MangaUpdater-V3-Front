@@ -46,10 +46,11 @@ export const UserDataCard = ({ data, onClick }: Props) => {
     >
       <Card
         sx={{
-          backgroundColor: "transparent",
+          backgroundColor: "rgba(15, 23, 33, 0.72)",
+          border: "1px solid rgba(148, 163, 184, 0.12)",
           borderRadius: "0.5rem",
           overflow: "hidden",
-          boxShadow: 3,
+          boxShadow: "0 14px 38px rgba(0, 0, 0, 0.18)",
           transition: "transform 0.3s",
           ":hover": { transform: "scale(1.02)" },
           display: "flex",
@@ -84,7 +85,7 @@ export const UserDataCard = ({ data, onClick }: Props) => {
                 top: 8,
                 right: 8,
                 backdropFilter: "blur(4px)",
-                backgroundColor: "rgba(0, 0, 0, 0.65)",
+                  backgroundColor: "rgba(15, 23, 33, 0.82)",
                 color: isCompleted
                   ? "#00e676"
                   : greaterThan
@@ -111,7 +112,7 @@ export const UserDataCard = ({ data, onClick }: Props) => {
               width: "100%",
               height: "100%",
               background:
-                "linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1))",
+                "linear-gradient(to top, rgba(9, 12, 18, 0.92), rgba(15, 23, 33, 0.18))",
               backdropFilter: "blur(8px)",
               color: "#fff",
               display: "flex",
@@ -132,7 +133,7 @@ export const UserDataCard = ({ data, onClick }: Props) => {
                 position: "absolute",
                 top: 8,
                 left: 8,
-                backgroundColor: "rgba(0, 0, 0, 0.65)",
+                backgroundColor: "rgba(15, 23, 33, 0.82)",
                 padding: "4px 8px",
                 borderRadius: "8px",
                 fontWeight: "bold",
@@ -197,7 +198,7 @@ export const UserDataCard = ({ data, onClick }: Props) => {
                     data.status === "FINISHED"
                       ? "rgba(0, 230, 118, 0.5)"
                       : data.status === "RELEASING"
-                      ? "rgba(41, 121, 255, 0.5)"
+                      ? "rgba(93, 173, 226, 0.45)"
                       : data.status === "NOT_YET_RELEASED"
                       ? "rgba(255, 179, 0, 0.5)"
                       : data.status === "CANCELLED"
@@ -245,7 +246,7 @@ export const UserDataCard = ({ data, onClick }: Props) => {
                     label={genre}
                     size="small"
                     sx={{
-                      backgroundColor: "rgba(255,255,255,0.15)",
+                      backgroundColor: "rgba(148, 163, 184, 0.18)",
                       color: "#fff",
                       height: 20,
                       fontSize: "0.65rem",

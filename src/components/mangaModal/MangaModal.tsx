@@ -32,6 +32,7 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
     queryFn: fetchMangaById(id),
     enabled: !!id,
   });
+  const displayTitle = data?.titleEnglish ?? data?.titleRomaji ?? "Manga";
 
   if (isLoading)
     return (
@@ -66,15 +67,16 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
         open={open}
         onClose={onClose}
         slotProps={{
-          backdrop: { sx: { backgroundColor: "rgba(0,0,0,0.85)" } },
+          backdrop: { sx: { backgroundColor: "rgba(9, 12, 18, 0.86)", backdropFilter: "blur(6px)" } },
         }}
       >
         <Box
           sx={{
-            bgcolor: "#22252f",
-            borderRadius: 2,
-            boxShadow: "0 10px 30px rgba(0,0,0,0.8)",
-            color: "#eee",
+            bgcolor: "rgba(17, 24, 39, 0.96)",
+            borderRadius: 4,
+            border: "1px solid rgba(148, 163, 184, 0.14)",
+            boxShadow: "0 24px 64px rgba(0,0,0,0.36)",
+            color: "#e2e8f0",
             position: "absolute",
             top: "50%",
             left: "50%",
@@ -100,10 +102,11 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
     >
       <Box
         sx={{
-          bgcolor: "#22252f",
-          borderRadius: 2,
-          boxShadow: "0 10px 30px rgba(0,0,0,0.8)",
-          color: "#eee",
+          bgcolor: "rgba(17, 24, 39, 0.96)",
+          borderRadius: 4,
+          border: "1px solid rgba(148, 163, 184, 0.14)",
+          boxShadow: "0 24px 64px rgba(0,0,0,0.36)",
+          color: "#e2e8f0",
           position: "absolute",
           top: "50%",
           left: "50%",
@@ -135,7 +138,7 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
             <Typography variant="h5" fontWeight={600} color="#ccc">
               Oops! Looks like this manga is taking a little break...
             </Typography>
-            <Typography variant="body2" color="#999" maxWidth={480}>
+            <Typography variant="body2" color="rgba(226, 232, 240, 0.64)" maxWidth={480}>
               We don’t have any info about it here yet. But don’t worry, we’re
               always hunting down new titles! Try another one or check back
               later.
@@ -148,7 +151,7 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
                 <CardMedia
                   component="img"
                   image={data.coverUrl}
-                  alt={data.titleEnglish}
+                  alt={displayTitle}
                   sx={{
                     width: 160,
                     height: 240,
@@ -174,9 +177,9 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
                       fontWeight={700}
                       sx={{ color: "#fff", mb: 0.5 }}
                       noWrap
-                      title={data.titleEnglish}
+                      title={displayTitle}
                     >
-                      {data.titleEnglish}
+                      {displayTitle}
                     </Typography>
                     <Typography
                       variant="subtitle1"
@@ -197,13 +200,14 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
                       variant="outlined"
                       size="small"
                       sx={{
-                        borderColor: "#3f51b5",
-                        color: "#3f51b5",
+                        borderColor: "rgba(93, 173, 226, 0.26)",
+                        color: "#a9ddff",
                         textTransform: "none",
                         fontWeight: 600,
+                        backgroundColor: "rgba(93, 173, 226, 0.08)",
                         "&:hover": {
-                          backgroundColor: "rgba(63,81,181,0.1)",
-                          borderColor: "#3f51b5",
+                          backgroundColor: "rgba(93, 173, 226, 0.14)",
+                          borderColor: "rgba(93, 173, 226, 0.36)",
                         },
                       }}
                     >
@@ -218,13 +222,14 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
                       variant="outlined"
                       size="small"
                       sx={{
-                        borderColor: "#00acc1",
-                        color: "#00acc1",
+                        borderColor: "rgba(93, 173, 226, 0.26)",
+                        color: "#a9ddff",
                         textTransform: "none",
                         fontWeight: 600,
+                        backgroundColor: "rgba(93, 173, 226, 0.08)",
                         "&:hover": {
-                          backgroundColor: "rgba(0,172,193,0.1)",
-                          borderColor: "#00acc1",
+                          backgroundColor: "rgba(93, 173, 226, 0.14)",
+                          borderColor: "rgba(93, 173, 226, 0.36)",
                         },
                       }}
                     >
@@ -239,22 +244,30 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
               sx={{
                 mt: 3,
                 maxHeight: 360,
-                borderRadius: 1,
+                borderRadius: 3,
                 overflowY: "auto",
-                backgroundColor: "#2e303e",
+                backgroundColor: "rgba(15, 23, 33, 0.9)",
+                border: "1px solid rgba(148, 163, 184, 0.12)",
                 "&::-webkit-scrollbar": {
-                  width: 6,
+                  width: 8,
                   backgroundColor: "transparent",
                 },
+                "&::-webkit-scrollbar-track": {
+                  backgroundColor: "rgba(255, 255, 255, 0.03)",
+                  borderRadius: 999,
+                },
                 "&::-webkit-scrollbar-thumb": {
-                  backgroundColor: "#90caf9",
-                  borderRadius: 3,
+                  background:
+                    "linear-gradient(180deg, rgba(93, 173, 226, 0.82) 0%, rgba(46, 134, 222, 0.74) 100%)",
+                  borderRadius: 999,
+                  border: "2px solid rgba(15, 23, 33, 0.9)",
                 },
                 "&::-webkit-scrollbar-thumb:hover": {
-                  backgroundColor: "#42a5f5",
+                  background:
+                    "linear-gradient(180deg, rgba(118, 188, 237, 0.9) 0%, rgba(59, 151, 235, 0.84) 100%)",
                 },
                 scrollbarWidth: "thin",
-                scrollbarColor: "#90caf9 transparent",
+                scrollbarColor: "rgba(93, 173, 226, 0.72) rgba(255, 255, 255, 0.03)",
               }}
             >
               <Table stickyHeader>
@@ -264,8 +277,10 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
                       <TableCell
                         key={headCell}
                         sx={{
-                          backgroundColor: "#3b3f58",
-                          color: "#bbdefb",
+                          background:
+                            "linear-gradient(180deg, rgba(17, 24, 39, 0.98) 0%, rgba(13, 19, 28, 0.94) 100%)",
+                          color: "#a9ddff",
+                          borderBottom: "1px solid rgba(148, 163, 184, 0.12)",
                           fontWeight: "bold",
                           fontSize: "0.95rem",
                           position: "sticky",
@@ -279,7 +294,7 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
                   </TableRow>
                 </TableHead>
 
-                <TableBody sx={{ backgroundColor: "#2e303e" }}>
+                <TableBody sx={{ backgroundColor: "rgba(15, 23, 33, 0.9)" }}>
                   {data.chapters
                     .slice()
                     .sort((a, b) => {
@@ -298,29 +313,30 @@ const MangaModal: React.FC<MangaModalProps> = ({ open, onClose, id }) => {
                         hover
                         sx={{
                           cursor: "pointer",
+                          backgroundColor: "transparent",
                           "&:hover": {
-                            backgroundColor: "#546e7a",
+                            backgroundColor: "rgba(255, 255, 255, 0.03)",
                           },
                         }}
                       >
-                        <TableCell sx={{ color: "#e0e0e0" }}>
+                        <TableCell sx={{ color: "#e2e8f0", borderColor: "rgba(148, 163, 184, 0.08)" }}>
                           Chapter {chapter.number}
                         </TableCell>
-                        <TableCell sx={{ color: "#e0e0e0" }}>
+                        <TableCell sx={{ color: "#e2e8f0", borderColor: "rgba(148, 163, 184, 0.08)" }}>
                           {chapter.date
                             ? format(new Date(chapter.date), "yyyy-MM-dd HH:mm")
                             : "N/A"}
                         </TableCell>
-                        <TableCell>
+                        <TableCell sx={{ borderColor: "rgba(148, 163, 184, 0.08)" }}>
                           <Link
                             href={chapter.url}
                             target="_blank"
                             rel="noopener noreferrer"
                             underline="hover"
                             sx={{
-                              color: "#90caf9",
+                              color: "#a9ddff",
                               fontWeight: 600,
-                              "&:hover": { color: "#42a5f5" },
+                              "&:hover": { color: "#76bced" },
                               cursor: "pointer",
                             }}
                           >

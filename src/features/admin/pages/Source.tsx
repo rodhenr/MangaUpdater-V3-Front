@@ -15,6 +15,16 @@ import {
 } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import {
+  adminDataSurfaceSx,
+  adminOutlineButtonSx,
+  adminPageHeroSx,
+  adminPageShellSx,
+  adminPageTitleSx,
+  adminPrimaryButtonSx,
+  sortAdminItems,
+  adminTableSx,
+} from "../admin.helpers";
 import { postSource } from "../../../api/source/source.commands";
 import { fetchPagedSources } from "../../../api/source/source.queries";
 import {
@@ -46,6 +56,10 @@ export const Source = () => {
   } = useQuery({
     queryKey: ["sources", { pageNumber, pageSize }],
     queryFn: fetchPagedSources,
+    select: (result) => ({
+      ...result,
+      items: sortAdminItems(result.items),
+    }),
   });
 
   const mutation = useMutation({
@@ -115,30 +129,47 @@ export const Source = () => {
   }
 
   return (
-    <Box>
+    <Box sx={adminPageShellSx}>
+      <Paper elevation={0} sx={adminPageHeroSx}>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          justifyContent="space-between"
+          spacing={2}
+          alignItems={{ xs: "flex-start", md: "center" }}
+        >
+          <Box>
+            <Typography sx={adminPageTitleSx}>
+              Source catalog
+            </Typography>
+          </Box>
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleOpenModal(null)}
+            sx={adminPrimaryButtonSx}
+          >
+            Add New Source
+          </Button>
+        </Stack>
+      </Paper>
+
       <Stack
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        mb={2}
-      >
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleOpenModal(null)}
-        >
-          Add New Source
-        </Button>
-      </Stack>
+      />
 
-      <TableContainer component={Paper}>
-        <Table>
+      <TableContainer component={Paper} sx={adminDataSurfaceSx}>
+        <Table sx={{ ...adminTableSx, tableLayout: "fixed", width: "100%" }}>
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Base URL</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell sx={{ width: "10%" }}>ID</TableCell>
+              <TableCell sx={{ width: "24%" }}>Name</TableCell>
+              <TableCell sx={{ width: "46%" }}>Base URL</TableCell>
+              <TableCell align="right" sx={{ width: "20%" }}>
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -146,7 +177,7 @@ export const Source = () => {
               <TableRow key={source.id}>
                 <TableCell>{source.id}</TableCell>
                 <TableCell>{source.name}</TableCell>
-                <TableCell>{source.baseUrl}</TableCell>
+                <TableCell sx={{ wordBreak: "break-word" }}>{source.baseUrl}</TableCell>
                 <TableCell
                   sx={{
                     display: "flex",
@@ -157,6 +188,7 @@ export const Source = () => {
                   <Button
                     variant="outlined"
                     onClick={() => handleOpenModal(source)}
+                    sx={adminOutlineButtonSx}
                   >
                     Edit
                   </Button>
@@ -168,7 +200,7 @@ export const Source = () => {
         </Table>
       </TableContainer>
 
-      <Stack direction="row" justifyContent="center" mt={4}>
+      <Stack direction="row" justifyContent="center" mt={1}>
         <Pagination
           count={sourceList?.totalPages || 0}
           page={pageNumber}

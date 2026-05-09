@@ -3,7 +3,7 @@ export interface IMangaBResponse {
   chapters: IChapters[];
   coverUrl: string;
   myAnimeListId: number | null;
-  titleEnglish: string;
+  titleEnglish: string | null;
   titleRomaji: string;
 }
 
@@ -20,7 +20,7 @@ export interface IMangaResponse {
   createdAt: Date;
   id: number;
   myAnimeListId: number;
-  titleEnglish: string;
+  titleEnglish: string | null;
   titleRomaji: string;
 }
 

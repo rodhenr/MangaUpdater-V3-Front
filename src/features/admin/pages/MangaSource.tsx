@@ -22,6 +22,16 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import {
+  adminDataSurfaceSx,
+  adminOutlineButtonSx,
+  adminPageHeroSx,
+  adminPageShellSx,
+  adminPageTitleSx,
+  adminPrimaryButtonSx,
+  sortAdminItems,
+  adminTableSx,
+} from "../admin.helpers";
+import {
   deleteMangaSource,
   postMangaSource,
 } from "../../../api/mangasource/mangasource.commands";
@@ -78,6 +88,10 @@ export const MangaSource = () => {
   } = useQuery({
     queryKey: ["mangaSource", { pageNumber, pageSize }],
     queryFn: fetchPagedMangaSources,
+    select: (result) => ({
+      ...result,
+      items: sortAdminItems(result.items),
+    }),
   });
 
   const mutation = useMutation({
@@ -190,31 +204,48 @@ export const MangaSource = () => {
   }
 
   return (
-    <Box>
+    <Box sx={adminPageShellSx}>
+      <Paper elevation={0} sx={adminPageHeroSx}>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          justifyContent="space-between"
+          spacing={2}
+          alignItems={{ xs: "flex-start", md: "center" }}
+        >
+          <Box>
+            <Typography sx={adminPageTitleSx}>
+              Manga source links
+            </Typography>
+          </Box>
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleOpenModal(null)}
+            sx={adminPrimaryButtonSx}
+          >
+            Add New Link
+          </Button>
+        </Stack>
+      </Paper>
+
       <Stack
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        mb={2}
-      >
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleOpenModal(null)}
-        >
-          Add New
-        </Button>
-      </Stack>
+      />
 
-      <TableContainer component={Paper}>
-        <Table>
+      <TableContainer component={Paper} sx={adminDataSurfaceSx}>
+        <Table sx={adminTableSx}>
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Manga</TableCell>
               <TableCell>Source</TableCell>
               <TableCell>URL</TableCell>
-              <TableCell>Aditional Info</TableCell>
+              <TableCell sx={{ whiteSpace: "nowrap", minWidth: 132 }}>
+                Aditional Info
+              </TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -236,6 +267,7 @@ export const MangaSource = () => {
                   <Button
                     variant="outlined"
                     onClick={() => handleOpenModal(item)}
+                    sx={adminOutlineButtonSx}
                   >
                     Edit
                   </Button>
@@ -243,6 +275,7 @@ export const MangaSource = () => {
                     variant="outlined"
                     color="error"
                     onClick={() => handleOpenDeleteDialog(item)}
+                    sx={adminOutlineButtonSx}
                   >
                     Delete
                   </Button>
@@ -253,7 +286,7 @@ export const MangaSource = () => {
         </Table>
       </TableContainer>
 
-      <Stack direction="row" justifyContent="center" mt={4}>
+      <Stack direction="row" justifyContent="center" mt={1}>
         <Pagination
           count={sourceList?.totalPages || 0}
           page={pageNumber}

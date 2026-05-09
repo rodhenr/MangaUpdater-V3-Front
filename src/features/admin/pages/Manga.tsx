@@ -22,6 +22,17 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import {
+  adminDataSurfaceSx,
+  adminOutlineButtonSx,
+  adminPageHeroSx,
+  adminPageShellSx,
+  adminPageTitleSx,
+  adminPrimaryButtonSx,
+  sortAdminItems,
+  adminTableSx,
+} from "../admin.helpers";
+
+import {
   deleteManga,
   postManga,
   updateManga,
@@ -71,6 +82,7 @@ const columns = [
 
 export const Manga = () => {
   const pageSize = 12;
+  const requestPageSize = 5000;
   const queryClient = useQueryClient();
   const [pageNumber, setPageNumber] = useState(1);
   const [openModal, setOpenModal] = useState(false);
@@ -128,9 +140,21 @@ export const Manga = () => {
     error,
     isLoading,
   } = useQuery({
-    queryKey: ["manga", { pageNumber, pageSize }],
+    queryKey: ["manga", { pageNumber: 1, pageSize: requestPageSize }],
     queryFn: fetchPagedMangas,
+    select: (result) => ({
+      ...result,
+      items: sortAdminItems(result.items),
+    }),
   });
+
+  const pagedMangas = mangaList?.items.slice(
+    (pageNumber - 1) * pageSize,
+    pageNumber * pageSize
+  );
+  const totalPages = mangaList
+    ? Math.max(1, Math.ceil(mangaList.items.length / pageSize))
+    : 0;
 
   const mutation = useMutation({
     mutationFn: postManga,
@@ -160,7 +184,7 @@ export const Manga = () => {
         coverUrl: String(item["coverUrl"]),
         aniListId: Number(item["aniListId"]),
         myAnimeListId: Number(item["myAnimeListId"]),
-        titleEnglish: String(item["titleEnglish"]),
+        titleEnglish: String(item["titleEnglish"] ?? item["titleRomaji"]),
         titleRomaji: String(item["titleRomaji"]),
       };
 
@@ -225,24 +249,39 @@ export const Manga = () => {
   }
 
   return (
-    <Box>
+    <Box sx={adminPageShellSx}>
+      <Paper elevation={0} sx={adminPageHeroSx}>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          justifyContent="space-between"
+          spacing={2}
+          alignItems={{ xs: "flex-start", md: "center" }}
+        >
+          <Box>
+            <Typography sx={adminPageTitleSx}>
+              Manga library
+            </Typography>
+          </Box>
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleOpenModal(null)}
+            sx={adminPrimaryButtonSx}
+          >
+            Add New Manga
+          </Button>
+        </Stack>
+      </Paper>
+
       <Stack
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        mb={2}
-      >
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleOpenModal(null)}
-        >
-          Add New Manga
-        </Button>
-      </Stack>
+      />
 
-      <TableContainer component={Paper}>
-        <Table>
+      <TableContainer component={Paper} sx={adminDataSurfaceSx}>
+        <Table sx={adminTableSx}>
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
@@ -252,10 +291,10 @@ export const Manga = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {mangaList?.items.map((manga) => (
+            {pagedMangas?.map((manga) => (
               <TableRow key={manga.id}>
                 <TableCell>{manga.id}</TableCell>
-                <TableCell>{manga.titleEnglish}</TableCell>
+                <TableCell>{manga.titleEnglish ?? manga.titleRomaji}</TableCell>
                 <TableCell>
                   {new Date(manga.createdAt).toLocaleDateString()}
                 </TableCell>
@@ -269,6 +308,7 @@ export const Manga = () => {
                   <Button
                     variant="outlined"
                     onClick={() => handleOpenModal(manga)}
+                    sx={adminOutlineButtonSx}
                   >
                     Edit
                   </Button>
@@ -276,6 +316,7 @@ export const Manga = () => {
                     variant="outlined"
                     color="error"
                     onClick={() => handleOpenDeleteDialog(manga)}
+                    sx={adminOutlineButtonSx}
                   >
                     Delete
                   </Button>
@@ -286,9 +327,9 @@ export const Manga = () => {
         </Table>
       </TableContainer>
 
-      <Stack direction="row" justifyContent="center" mt={4}>
+      <Stack direction="row" justifyContent="center" mt={1}>
         <Pagination
-          count={mangaList?.totalPages || 0}
+          count={totalPages}
           page={pageNumber}
           onChange={(_, page) => setPageNumber(page)}
           color="primary"
@@ -315,7 +356,11 @@ export const Manga = () => {
         <DialogContent>
           <DialogContentText>
             Are you sure you want to delete{" "}
-            <strong>{selectedMangaToDelete?.titleEnglish}</strong>? This action
+            <strong>
+              {selectedMangaToDelete?.titleEnglish ??
+                selectedMangaToDelete?.titleRomaji}
+            </strong>
+            ? This action
             cannot be undone.
           </DialogContentText>
         </DialogContent>

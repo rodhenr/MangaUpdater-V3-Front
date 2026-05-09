@@ -5,8 +5,22 @@ import "./LayoutHome.scss";
 
 export const LayoutHome: React.FC = () => {
   return (
-    <>
-      <AppBar position="static" sx={{ bgcolor: "#1B1B1F" }}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        background:
+          "radial-gradient(circle at top right, rgba(93, 173, 226, 0.12), transparent 24%), linear-gradient(180deg, #090c12 0%, #0f141d 100%)",
+      }}
+    >
+      <AppBar
+        position="static"
+        elevation={0}
+        sx={{
+          bgcolor: "rgba(17, 24, 39, 0.82)",
+          backdropFilter: "blur(14px)",
+          borderBottom: "1px solid rgba(148, 163, 184, 0.12)",
+        }}
+      >
         <Toolbar
           sx={{
             justifyContent: "space-between",
@@ -28,14 +42,13 @@ export const LayoutHome: React.FC = () => {
               letterSpacing: "-0.04em",
             }}
           >
-            <Box component="span" sx={{ color: "#E5E7EB" }}>
+            <Box component="span" sx={{ color: "#E2E8F0" }}>
               Manga
             </Box>
             <Box
               component="span"
               sx={{
-                background:
-                  "linear-gradient(90deg, #4F7CFF 0%, #6366F1 50%, #A855F7 100%)",
+                background: "linear-gradient(90deg, #5dade2 0%, #2e86de 100%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 color: "transparent",
@@ -48,10 +61,14 @@ export const LayoutHome: React.FC = () => {
       </AppBar>
       <Container
         maxWidth={false}
-        sx={{ marginTop: 2, px: { xs: 8, sm: 8, md: 8, lg: 24 } }}
+        sx={{
+          marginTop: 2,
+          px: { xs: 4, sm: 6, md: 8, lg: 24 },
+          pb: 4,
+        }}
       >
         <Outlet />
       </Container>
-    </>
+    </Box>
   );
 };

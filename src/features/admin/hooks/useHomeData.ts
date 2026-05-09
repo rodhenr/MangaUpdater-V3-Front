@@ -4,6 +4,7 @@ import { fetchMetrics } from "../../../api/dashboard/dashboard.queries";
 import { fetchPagedLogs } from "../../../api/logs/logs.queries";
 import { fetchPagedMangas } from "../../../api/manga/manga.queries";
 import { fetchSourceDistribution } from "../../../api/source/source.queries";
+import { sortAdminItems } from "../admin.helpers";
 
 export const useHomeData = () => {
   const { data: metricsData, isLoading: isMetricsLoading } = useQuery({
@@ -16,28 +17,38 @@ export const useHomeData = () => {
     queryFn: fetchPagedLogs,
     select: (result) => ({
       ...result,
-      items: result.items.map((log) => ({
-        ...log,
-        timestamp: new Date(log.timestamp).toLocaleString("en-US", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-        }),
-      })),
+      items: sortAdminItems(
+        result.items.map((log) => ({
+          ...log,
+          timestamp: new Date(log.timestamp).toLocaleString("en-US", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          }),
+        }))
+      ),
     }),
   });
 
   const { data: mangasData, isLoading: isMangasLoading } = useQuery({
     queryKey: ["mangas", { pageNumber: 1, pageSize: 5 }],
     queryFn: fetchPagedMangas,
+    select: (result) => ({
+      ...result,
+      items: sortAdminItems(result.items),
+    }),
   });
 
   const { data: chaptersData, isLoading: isChaptersLoading } = useQuery({
     queryKey: ["chaptersLog", { pageNumber: 1, pageSize: 5 }],
     queryFn: fetchPagedChapters,
+    select: (result) => ({
+      ...result,
+      items: sortAdminItems(result.items),
+    }),
   });
 
   const {
